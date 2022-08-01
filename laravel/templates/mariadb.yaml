@@ -52,6 +52,8 @@ spec:
       terminationGracePeriodSeconds: 10
       initContainers:
         - name: take-data-dir-ownership
+          securityContext:
+            {{- toYaml .Values.mariadb.podSecurityContext | nindent 12 }}
           image: alpine:3
           # Give `mysql` user permissions a mounted volume
           # https://stackoverflow.com/a/51195446/4360433

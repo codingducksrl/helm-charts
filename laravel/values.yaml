@@ -86,7 +86,8 @@ mariadb:
   databaseName: laravel
   storageClass: primary-storage
   podAnnotations: {}
-  podSecurityContext: {}
+  podSecurityContext:
+    runAsUser: 0
   env: {}
   phpmyadmin:
     enabled: true
