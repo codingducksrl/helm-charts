@@ -93,9 +93,9 @@ spec:
                 - -p${MYSQL_ROOT_PASSWORD}
             failureThreshold: 3
             periodSeconds: 10
-{{/*          volumeMounts:*/}}
-{{/*            - name: database*/}}
-{{/*              mountPath: /var/lib/mysql*/}}
+          volumeMounts:
+            - name: database
+              mountPath: /var/lib/mysql
   volumeClaimTemplates:
     - metadata:
         name: database
