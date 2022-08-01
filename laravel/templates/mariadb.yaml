@@ -69,7 +69,9 @@ spec:
               value: '%'
             - name: MYSQL_DATABASE
               value: {{ .Values.mariadb.databaseName }}
-            {{- toYaml .Values.mariadb.env | nindent 12 }}
+            {{- with .Values.mariadb.env }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
           livenessProbe:
             exec:
               command:
