@@ -1,0 +1,115 @@
+{{- if and (.Values.mariadb.enabled) (.Values.mariadb.phpmyadmin.enabled) -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "laravel.fullname" . }}-phpmyadmin
+  labels:
+    app: {{ include "laravel.fullname" . }}-phpmyadmin
+      {{- include "laravel.labels" . | nindent 4 }}
+spec:
+  type: ClusterIP
+  selector:
+    app: {{ include "laravel.fullname" . }}-phpmyadmin
+  ports:
+    - port: 80
+      name: http
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "laravel.fullname" . }}-phpmyadmin
+  labels:
+    {{- include "laravel.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ include "laravel.fullname" . }}-phpmyadmin
+      {{- include "laravel.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.mariadb.phpmyadmin.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        app: {{ include "laravel.fullname" . }}-phpmyadmin
+        {{- include "laravel.selectorLabels" . | nindent 8 }}
+    spec:
+      serviceAccountName: {{ include "laravel.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.mariadb.phpmyadmin.podSecurityContext | nindent 8 }}
+      containers:
+        - name: "phpmyadmin"
+          securityContext:
+            {{- toYaml .Values.mariadb.phpmyadmin.podSecurityContext | nindent 12 }}
+          image: "phpmyadmin/phpmyadmin:{{ .Values.mariadb.phpmyadmin.version }}"
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: "PMA_HOST"
+              value: "{{ .Values.mariadb.rootPassword }}"
+            - name: "PMA_USER"
+              value: root
+            - name: "PMA_PASSWORD"
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "laravel.fullname" . }}-mariadb-secret
+                  key: password
+                  optional: false
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ include "laravel.fullname" . }}-phpmyadmin-cert
+spec:
+  {{- if .Values.project.username }}
+  commonName: "db-{{ .Values.project.name }}-{{ .Values.project.username }}.dev3.codingduck.it"
+  {{- else}}
+  commonName: "db-{{ .Values.project.name }}.dev3.codingduck.it"
+  {{- end}}
+  secretName: {{ include "laravel.fullname" . }}-phpmyadmin-cert-secret
+  issuerRef:
+    name: cloudflare-codingduck-issuer
+    kind: ClusterIssuer
+  dnsNames:
+    {{- if .Values.project.username }}
+    - "db-{{ .Values.project.name }}-{{ .Values.project.username }}.dev3.codingduck.it"
+    {{- else}}
+    - "db-{{ .Values.project.name }}.dev3.codingduck.it"
+    {{- end}}
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: {{ include "laravel.fullname" . }}-phpmyadmin-route
+  annotations:
+    kubernetes.io/ingress.class: private-ingress
+spec:
+  entryPoints:
+    - websecure
+  routes:
+  {{- if .Values.project.username }}
+    - match: Host("db-{{ .Values.project.name }}-{{ .Values.project.username }}.dev3.codingduck.it")
+  {{- else}}
+    - match: Host("db-{{ .Values.project.name }}.dev3.codingduck.it")
+  {{- end}}
+      kind: Rule
+      services:
+        - name: {{ include "laravel.fullname" . }}-phpmyadmin
+          port: 80
+          kind: Service
+  tls:
+    secretName: {{ include "laravel.fullname" . }}-phpmyadmin-cert-secret
+{{- end }}

@@ -1,0 +1,93 @@
+{{- if .Values.mariadb.enabled -}}
+# Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "laravel.fullname" . }}-mariadb
+  labels:
+    app: {{ include "laravel.fullname" . }}-mariadb
+    {{- include "laravel.labels" . | nindent 4 }}
+spec:
+  type: ClusterIP
+  selector:
+    app: {{ include "laravel.fullname" . }}-mariadb
+  ports:
+    - port: 3306
+      name: sql
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ include "laravel.fullname" . }}-mariadb-secret
+  annotations:
+    secret-generator.v1.mittwald.de/autogenerate: password
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "laravel.fullname" . }}-mariadb
+  labels:
+      {{- include "laravel.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ include "laravel.fullname" . }}-mariadb # has to match .spec.template.metadata.labels
+      {{- include "laravel.selectorLabels" . | nindent 6 }}
+  serviceName: {{ include "laravel.fullname" . }}-mariadb
+  replicas: 1 # by default is 1
+  minReadySeconds: 10 # by default is 0
+  template:
+    metadata:
+      {{- with .Values.mariadb.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        app: {{ include "laravel.fullname" . }}-mariadb # has to match .spec.selector.matchLabels
+        {{- include "laravel.selectorLabels" . | nindent 8 }}
+    spec:
+      serviceAccountName: {{ include "laravel.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.mariadb.podSecurityContext | nindent 8 }}
+      terminationGracePeriodSeconds: 10
+      containers:
+        - name: mariadb
+          securityContext:
+            {{- toYaml .Values.mariadb.podSecurityContext | nindent 12 }}
+          image: "mariadb:{{ .Values.mariadb.version }}"
+          ports:
+            - containerPort: 3306
+              name: sql
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "laravel.fullname" . }}-mariadb-secret
+                  key: password
+                  optional: false
+            - name: MYSQL_ROOT_HOST
+              value: '%'
+            - name: MYSQL_DATABASE
+              value: {{ .Values.mariadb.databaseName }}
+            {{- toYaml .Values.mariadb.env | nindent 12 }}
+          livenessProbe:
+            exec:
+              command:
+                - mysqladmin
+                - ping
+                - -p${MYSQL_ROOT_PASSWORD}
+            failureThreshold: 3
+            periodSeconds: 10
+          volumeMounts:
+            - name: database
+              mountPath: /var/lib/mysql
+  volumeClaimTemplates:
+    - metadata:
+        name: database
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        storageClassName: {{ .Values.mariadb.storageClass }}
+        resources:
+          requests:
+            storage: 1Gi
+{{- end }}

@@ -75,6 +75,26 @@ autoscaling:
   targetCPUUtilizationPercentage: 80
   # targetMemoryUtilizationPercentage: 80
 
+project:
+  name: "repo-di-prova"
+  public: false
+  username: false
+
+mariadb:
+  enabled: true
+  version: 10
+  databaseName: laravel
+  storageClass: local-path
+  podAnnotations: {}
+  podSecurityContext: {}
+  env: {}
+  phpmyadmin:
+    enabled: true
+    version: 5.2.0
+    podAnnotations: {}
+    podSecurityContext: {}
+
+
 nodeSelector: {}
 
 tolerations: []
