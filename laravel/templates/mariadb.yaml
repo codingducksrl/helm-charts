@@ -50,19 +50,19 @@ spec:
       securityContext:
         {{- toYaml .Values.mariadb.podSecurityContext | nindent 8 }}
       terminationGracePeriodSeconds: 10
-{{/*      initContainers:*/}}
-{{/*        - name: take-data-dir-ownership*/}}
-{{/*          image: alpine:3*/}}
-{{/*          # Give `mysql` user permissions a mounted volume*/}}
-{{/*          # https://stackoverflow.com/a/51195446/4360433*/}}
-{{/*          command:*/}}
-{{/*            - chown*/}}
-{{/*            - -R*/}}
-{{/*            - mysql:mysql*/}}
-{{/*            - /var/lib/mysql*/}}
-{{/*          volumeMounts:*/}}
-{{/*            - name: database*/}}
-{{/*              mountPath: /var/lib/mysql*/}}
+      initContainers:
+        - name: take-data-dir-ownership
+          image: alpine:3
+          # Give `mysql` user permissions a mounted volume
+          # https://stackoverflow.com/a/51195446/4360433
+          command:
+            - chown
+            - -R
+            - 999:999
+            - /var/lib/mysql
+          volumeMounts:
+            - name: database
+              mountPath: /var/lib/mysql
       containers:
         - name: mariadb
           securityContext:
