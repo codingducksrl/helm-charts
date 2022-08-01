@@ -47,7 +47,7 @@ spec:
           imagePullPolicy: IfNotPresent
           env:
             - name: "PMA_HOST"
-              value: "{{ .Values.mariadb.rootPassword }}"
+              value: {{ include "laravel.fullname" . }}-mariadb
             - name: "PMA_USER"
               value: root
             - name: "PMA_PASSWORD"
