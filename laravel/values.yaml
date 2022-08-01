@@ -84,7 +84,7 @@ mariadb:
   enabled: true
   version: 10
   databaseName: laravel
-  storageClass: local-path
+  storageClass: primary-storage
   podAnnotations: {}
   podSecurityContext: {}
   env: {}

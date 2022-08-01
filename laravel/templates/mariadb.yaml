@@ -61,7 +61,7 @@ spec:
             - 999:999
             - /var/lib/mysql
           volumeMounts:
-            - name: data
+            - name: database
               mountPath: /var/lib/mysql
       containers:
         - name: mariadb
