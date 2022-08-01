@@ -82,7 +82,7 @@ project:
 
 mariadb:
   enabled: true
-  version: 10
+  version: 10.8.3
   databaseName: laravel
   storageClass: primary-storage
   podAnnotations: {}

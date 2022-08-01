@@ -58,7 +58,7 @@ spec:
           command:
             - chown
             - -R
-            - 999:999
+            - mysql:mysql
             - /var/lib/mysql
           volumeMounts:
             - name: database
