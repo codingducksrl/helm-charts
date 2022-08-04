@@ -87,14 +87,15 @@ spec:
             {{- with .Values.mariadb.env }}
             {{- toYaml . | nindent 12 }}
             {{- end }}
-{{/*          livenessProbe:*/}}
-{{/*            exec:*/}}
-{{/*              command:*/}}
-{{/*                - mysqladmin*/}}
-{{/*                - ping*/}}
-{{/*                - -p${MYSQL_ROOT_PASSWORD}*/}}
-{{/*            failureThreshold: 3*/}}
-{{/*            periodSeconds: 10*/}}
+          startupProbe:
+            exec:
+              command:
+                - bash
+                - -c
+                - mysqladmin status -p$MYSQL_ROOT_PASSWORD
+            failureThreshold: 3
+            successThreshold: 1
+            periodSeconds: 10
           volumeMounts:
             - name: database
               mountPath: /var/lib/mysql
