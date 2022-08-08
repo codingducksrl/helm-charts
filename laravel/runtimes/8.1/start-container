@@ -1,10 +1,14 @@
 #!/usr/bin/env bash
 
+BASE_DIR="/var/www/html"
+
+# Default SSH keys for the container
 if [ ! -z "$OWNER" ]; then
-    curl "https://github.com/$OWNER.keys" > /var/www/html/.ssh/authorized_keys
+    curl "https://github.com/$OWNER.keys" > $BASE_DIR/.ssh/authorized_keys
     service ssh start
     service squid start
 fi
+# End default SSH keys for the container
 
 if [ ! -z "$WWWUSER" ]; then
     usermod -u $WWWUSER sail

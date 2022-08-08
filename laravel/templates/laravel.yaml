@@ -1,0 +1,163 @@
+# Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "laravel.fullname" . }}-web
+  labels:
+    app: {{ include "laravel.fullname" . }}-web
+    {{- include "laravel.labels" . | nindent 4 }}
+spec:
+  type: ClusterIP
+  selector:
+    app: {{ include "laravel.fullname" . }}-web
+  ports:
+    - port: 80
+      name: http
+---
+{{- if .Values.web.ssh -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "laravel.fullname" . }}-proxy
+  labels:
+    app: {{ include "laravel.fullname" . }}-proxy
+    {{- include "laravel.labels" . | nindent 4 }}
+spec:
+  type: ClusterIP
+  selector:
+    app: {{ include "laravel.fullname" . }}-proxy
+  ports:
+    - port: 3128
+      name: squid
+---
+{{- end }}
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ include "laravel.fullname" . }}-web-key
+  annotations:
+    secret-generator.v1.mittwald.de/type: string
+    secret-generator.v1.mittwald.de/secure: "yes"
+    secret-generator.v1.mittwald.de/encoding: "base64"
+    secret-generator.v1.mittwald.de/length: 32B
+    secret-generator.v1.mittwald.de/autogenerate: key
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "laravel.fullname" . }}-web
+  labels:
+      {{- include "laravel.labels" . | nindent 4 }}
+
+spec:
+  selector:
+    matchLabels:
+      app: {{ include "laravel.fullname" . }}-web # has to match .spec.template.metadata.labels
+      {{- include "laravel.selectorLabels" . | nindent 6 }}
+  serviceName: {{ include "laravel.fullname" . }}-web
+  replicas: 1 # by default is 1
+  minReadySeconds: 10 # by default is 0
+  template:
+    metadata:
+      {{- with .Values.web.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        app: {{ include "laravel.fullname" . }}-web # has to match .spec.selector.matchLabels
+        {{- include "laravel.selectorLabels" . | nindent 8 }}
+    spec:
+      serviceAccountName: {{ include "laravel.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.web.podSecurityContext | nindent 8 }}
+      terminationGracePeriodSeconds: 10
+      containers:
+        - name: web
+          securityContext:
+            {{- toYaml .Values.mariadb.podSecurityContext | nindent 12 }}
+          image: "{{ .Values.web.image }}"
+          ports:
+            - containerPort: 80
+              name: http
+          env:
+            - name: LARAVEL_APP_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "laravel.fullname" . }}-web-key
+                  key: key
+                  optional: false
+            - name: APP_KEY
+              value: "base64:$(LARAVEL_APP_KEY)"
+            {{- with .Values.web.env }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+          volumeMounts:
+            - name: persistence
+              mountPath: /var/www/html/bootstrap/cache/
+              subPath: cache
+            - name: persistence
+              mountPath: /var/www/html/storage/
+              subPath: storage
+  volumeClaimTemplates:
+    - metadata:
+        name: persistence
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        storageClassName: {{ .Values.web.storageClass }}
+        resources:
+          requests:
+            storage: 1Gi
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: {{ include "laravel.fullname" . }}-web-route
+  annotations:
+    {{- $endpoint := "dev3" -}}
+    {{- if .Values.web.public }}
+    kubernetes.io/ingress.class: public-ingress
+    {{- $endpoint = "dev2" -}}
+    {{- else }}
+    kubernetes.io/ingress.class: private-ingress
+    {{- end }}
+spec:
+  entryPoints:
+    - websecure
+  routes:
+  {{- if .Values.project.username }}
+    - match: Host("{{ .Values.project.name }}-{{ .Values.project.username }}.{{ $endpoint }}.codingduck.it")
+  {{- else}}
+    - match: Host("{{ .Values.project.name }}.{{ $endpoint }}.codingduck.it")
+  {{- end}}
+      kind: Rule
+      services:
+        - name: {{ include "laravel.fullname" . }}-web
+          port: 80
+          kind: Service
+  tls:
+    {{- if .Values.web.public }}
+    secretName: public-cert-secret
+    {{- else }}
+    secretName: private-cert-secret
+    {{- end }}
+{{- if .Values.web.ssh -}}
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: {{ include "laravel.fullname" . }}-ssh-route
+  annotations:
+    kubernetes.io/ingress.class: private-ingress
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host("ssh-{{ .Values.project.name }}.dev3.codingduck.it")
+      kind: Rule
+      services:
+        - name: {{ include "laravel.fullname" . }}-proxy
+          port: 3128
+          kind: Service
+  tls:
+    secretName: private-cert-secret
+{{- end}}
