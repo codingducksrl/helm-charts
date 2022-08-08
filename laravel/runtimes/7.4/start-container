@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
 
+if [ ! -z "$OWNER" ]; then
+    curl "https://github.com/$OWNER.keys" > /var/www/html/.ssh/authorized_keys
+    service ssh start
+    service squid start
+fi
+
 if [ ! -z "$WWWUSER" ]; then
     usermod -u $WWWUSER sail
 fi

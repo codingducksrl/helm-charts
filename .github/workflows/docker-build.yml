@@ -1,0 +1,30 @@
+name: Docker build
+
+on:
+  release:
+    types: [ created ]
+  workflow_dispatch:
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  runtime-74:
+    name: Runtime 7.4
+    uses: ./.github/workflows/version-check.yaml
+    with:
+      runtime: 7.4
+    secrets: inherit
+  runtime-80:
+    name: Runtime 8.0
+    uses: ./.github/workflows/version-check.yaml
+    with:
+      runtime: 8.0
+    secrets: inherit
+  runtime-81:
+    name: Runtime 8.1
+    uses: ./.github/workflows/version-check.yaml
+    with:
+      runtime: 8.1
+    secrets: inherit

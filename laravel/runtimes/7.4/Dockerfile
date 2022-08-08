@@ -50,13 +50,34 @@ RUN apt-get update \
 RUN setcap "cap_net_bind_service=+ep" /usr/bin/php7.4
 
 RUN groupadd --force -g $WWWGROUP sail
-RUN useradd -ms /bin/bash --no-user-group -g $WWWGROUP -u 1337 sail
+
+# Custom part
+RUN useradd -s /bin/bash --no-user-group -d /var/www/html/ -g $WWWGROUP -u 1337 sail
+
+RUN apt update \
+    && apt install -y openssh-server \
+    && service ssh start
+
+RUN apt update \
+    && apt install -y squid \
+    && service squid start
+
+COPY sshd_config /etc/ssh/sshd_config
+COPY squid.conf /etc/squid/squid.conf
+# End custom part
 
 COPY start-container /usr/local/bin/start-container
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY php.ini /etc/php/7.4/cli/conf.d/99-sail.ini
 RUN chmod +x /usr/local/bin/start-container
 
+# Custom part
+RUN chmod -R 2774 /var/www/html
+RUN chown -R sail:$WWWGROUP /var/www/html
+RUN mkdir /var/www/html/.ssh
+
 EXPOSE 8000
+EXPOSE 3128
+# End custom part
 
 ENTRYPOINT ["start-container"]
