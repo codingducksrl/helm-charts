@@ -13,24 +13,9 @@ spec:
   ports:
     - port: 80
       name: http
----
-{{- if .Values.web.ssh -}}
-apiVersion: v1
-kind: Service
-metadata:
-  name: {{ include "laravel.fullname" . }}-proxy
-  labels:
-    app: {{ include "laravel.fullname" . }}-proxy
-    {{- include "laravel.labels" . | nindent 4 }}
-spec:
-  type: ClusterIP
-  selector:
-    app: {{ include "laravel.fullname" . }}-proxy
-  ports:
     - port: 3128
       name: squid
 ---
-{{- end }}
 apiVersion: v1
 kind: Secret
 metadata:
@@ -114,7 +99,7 @@ metadata:
   name: {{ include "laravel.fullname" . }}-web-route
   annotations:
     {{- $endpoint := "dev3" -}}
-    {{- if .Values.web.public }}
+    {{- if .Values.project.public }}
     kubernetes.io/ingress.class: public-ingress
     {{- $endpoint = "dev2" -}}
     {{- else }}
@@ -135,7 +120,7 @@ spec:
           port: 80
           kind: Service
   tls:
-    {{- if .Values.web.public }}
+    {{- if .Values.project.public }}
     secretName: public-cert-secret
     {{- else }}
     secretName: private-cert-secret
@@ -155,7 +140,7 @@ spec:
     - match: Host("ssh-{{ .Values.project.name }}.dev3.codingduck.it")
       kind: Rule
       services:
-        - name: {{ include "laravel.fullname" . }}-proxy
+        - name: {{ include "laravel.fullname" . }}-web
           port: 3128
           kind: Service
   tls:
