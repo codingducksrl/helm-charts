@@ -28,5 +28,5 @@ jobs:
         with:
           context: laravel/runtimes/${{ inputs.runtime }}
           push: true
-          tags: codingducksrl/laravel:${{ inputs.runtime }}
+          tags: ghcr.io/codingducksrl/laravel:${{ inputs.runtime }}
           build-args: 'WWWGROUP=1000'
