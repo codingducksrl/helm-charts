@@ -1,0 +1,32 @@
+{{- if .Values.web.ssh -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "laravel.fullname" . }}-stunnel
+  labels:
+    {{- include "laravel.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ include "laravel.fullname" . }}-stunnel
+      {{- include "laravel.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "laravel.fullname" . }}-stunnel
+        {{- include "laravel.selectorLabels" . | nindent 8 }}
+    spec:
+      serviceAccountName: {{ include "laravel.serviceAccountName" . }}
+      containers:
+        - name: "stunnel"
+          image: "ghcr.io/codingducksrl/stunnel"
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: "SSH_HOST"
+              value: {{ include "laravel.fullname" . }}-web
+          ports:
+            - name: stunnel
+              containerPort: 3129
+
+{{- end -}}

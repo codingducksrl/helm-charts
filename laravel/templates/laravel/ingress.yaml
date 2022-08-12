@@ -1,0 +1,52 @@
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: {{ include "laravel.fullname" . }}-web-route
+  annotations:
+    {{- $endpoint := "dev3" -}}
+    {{- if .Values.project.public }}
+    kubernetes.io/ingress.class: public-ingress
+    {{- $endpoint = "dev2" -}}
+    {{- else }}
+    kubernetes.io/ingress.class: private-ingress
+    {{- end }}
+spec:
+  entryPoints:
+    - websecure
+  routes:
+  {{- if .Values.project.username }}
+    - match: Host("{{ .Values.project.name }}-{{ .Values.project.username }}.{{ $endpoint }}.codingduck.it")
+  {{- else}}
+    - match: Host("{{ .Values.project.name }}.{{ $endpoint }}.codingduck.it")
+  {{- end}}
+      kind: Rule
+      services:
+        - name: {{ include "laravel.fullname" . }}-web
+          port: 80
+          kind: Service
+  tls:
+    {{- if .Values.project.public }}
+    secretName: public-cert-secret
+    {{- else }}
+    secretName: private-cert-secret
+    {{- end }}
+{{- if .Values.web.ssh -}}
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRouteTCP
+metadata:
+  name: {{ include "laravel.fullname" . }}-ssh-route
+  annotations:
+    kubernetes.io/ingress.class: private-ingress
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: HostSNI("ssh-{{ .Values.project.name }}.dev3.codingduck.it")
+      services:
+        - name: {{ include "laravel.fullname" . }}-stunnel
+          port: 3129
+  tls:
+    secretName: private-cert-secret
+{{- end}}
