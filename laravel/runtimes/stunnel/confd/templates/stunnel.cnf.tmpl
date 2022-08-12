@@ -1,0 +1,9 @@
+foreground = yes
+;syslog = no
+debug=6
+
+cert = /etc/stunnel/cert.pem
+
+[sslh]
+accept = :::3129
+connect = {{getv "/ssh/host" "localhost"}}:3128

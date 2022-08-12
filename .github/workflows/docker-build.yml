@@ -26,3 +26,9 @@ jobs:
     with:
       runtime: '8.1'
     secrets: inherit
+  stunnel:
+    name: Stunnel
+    uses: ./.github/workflows/build-image.yml
+    with:
+      image: 'stunnel'
+    secrets: inherit

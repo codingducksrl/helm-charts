@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+set -e
+
+export PATH="$PATH:/opt/confd/bin"
+
+confd -onetime -backend env
+
+stunnel /etc/stunnel/stunnel.conf

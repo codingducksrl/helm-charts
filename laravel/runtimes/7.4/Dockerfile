@@ -55,11 +55,8 @@ RUN groupadd --force -g $WWWGROUP sail
 RUN useradd -s /bin/bash --no-user-group -d /var/www/html/ -g $WWWGROUP -u 1337 sail
 
 RUN apt update \
-    && apt install -y openssh-server \
-    && service ssh start
-
-RUN apt update \
-    && apt install -y squid \
+    && apt install -y openssh-server squid\
+    && service ssh start \
     && service squid start
 
 COPY sshd_config /etc/ssh/sshd_config
