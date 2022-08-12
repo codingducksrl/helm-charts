@@ -26,10 +26,10 @@ spec:
   minReadySeconds: 10 # by default is 0
   template:
     metadata:
-        {{- with .Values.web.podAnnotations }}
+      {{- with .Values.web.podAnnotations }}
       annotations:
-          {{- toYaml . | nindent 8 }}
-        {{- end }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       labels:
         app: {{ include "laravel.fullname" . }}-web # has to match .spec.selector.matchLabels
           {{- include "laravel.selectorLabels" . | nindent 8 }}
@@ -46,10 +46,10 @@ spec:
           ports:
             - containerPort: 80
               name: http
-            {{- if .Values.web.ssh -}}
+            {{- if .Values.web.ssh }}
             - containerPort: 3128
               name: squid
-            {{- end -}}
+            {{- end }}
           env:
             - name: LARAVEL_APP_KEY
               valueFrom:
