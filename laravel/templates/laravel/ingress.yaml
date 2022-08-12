@@ -48,5 +48,6 @@ spec:
         - name: {{ include "laravel.fullname" . }}-stunnel
           port: 3129
   tls:
+    passthrough: true
     secretName: private-cert-secret
 {{- end}}
