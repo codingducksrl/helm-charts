@@ -3,7 +3,17 @@ entries:
   laravel:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2022-08-12T15:23:08.0687293+02:00"
+    created: "2022-08-12T15:33:44.8114434+02:00"
+    description: A Helm chart for Kubernetes
+    digest: 2887d3f344ba983dbf591c2f3eb835557e2392f9817fb677a1a0beafba54d08f
+    name: laravel
+    type: application
+    urls:
+    - laravel-0.1.13.tgz
+    version: 0.1.13
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2022-08-12T15:33:44.8044434+02:00"
     description: A Helm chart for Kubernetes
     digest: 08943c93934fd436e4d1145fdeba1e996247a09d167fffecabd58f6ea810a936
     name: laravel
@@ -13,7 +23,7 @@ entries:
     version: 0.1.12
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2022-08-12T15:23:08.0607744+02:00"
+    created: "2022-08-12T15:33:44.7948944+02:00"
     description: A Helm chart for Kubernetes
     digest: 24b51790df1c74ae028e7d717a663257502f0c4ae539a74246c7358945c6bf68
     name: laravel
@@ -23,7 +33,7 @@ entries:
     version: 0.1.11
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2022-08-12T15:23:08.0529417+02:00"
+    created: "2022-08-12T15:33:44.7870101+02:00"
     description: A Helm chart for Kubernetes
     digest: e6c43e166826707c83d2db0ccd988852da4189e29abe83f9b4e666415da01c3f
     name: laravel
@@ -33,7 +43,7 @@ entries:
     version: 0.1.10
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2022-08-12T15:23:08.0746956+02:00"
+    created: "2022-08-12T15:33:44.8174753+02:00"
     description: A Helm chart for Kubernetes
     digest: b8540af7780392e3808c9e53ef099459fc548396e0be6f805c7260c9bfc2d8fa
     name: laravel
@@ -43,7 +53,7 @@ entries:
     version: 0.1.9
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2022-08-12T15:23:08.0746956+02:00"
+    created: "2022-08-12T15:33:44.8164773+02:00"
     description: A Helm chart for Kubernetes
     digest: e843261770da74e24996691e2644ccf8126d4878b03f3deda156b7051091d32d
     name: laravel
@@ -53,7 +63,7 @@ entries:
     version: 0.1.8
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2022-08-12T15:23:08.0737267+02:00"
+    created: "2022-08-12T15:33:44.8164773+02:00"
     description: A Helm chart for Kubernetes
     digest: 292b8aed824083309c7ae65d3ce3a2c5024881084bd6a24679f4b2c686cbe90b
     name: laravel
@@ -63,7 +73,7 @@ entries:
     version: 0.1.7
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2022-08-12T15:23:08.0737267+02:00"
+    created: "2022-08-12T15:33:44.8154808+02:00"
     description: A Helm chart for Kubernetes
     digest: 43c076491a5818e19ee5f2a0d776747066c534ccbeeb357f978a96a07e9a2663
     name: laravel
@@ -73,7 +83,7 @@ entries:
     version: 0.1.6
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2022-08-12T15:23:08.0726965+02:00"
+    created: "2022-08-12T15:33:44.8154808+02:00"
     description: A Helm chart for Kubernetes
     digest: 87b41a80ec056f589baed6cb729559e9fa7aae60aaef5ab51c01259a8c413ca9
     name: laravel
@@ -83,7 +93,7 @@ entries:
     version: 0.1.5
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2022-08-12T15:23:08.0707295+02:00"
+    created: "2022-08-12T15:33:44.8144771+02:00"
     description: A Helm chart for Kubernetes
     digest: c9d50c55f1bdf89cd6a6dd2b7fd796a10dad9cc48610b95cf93ea233b6ca049d
     name: laravel
@@ -93,7 +103,7 @@ entries:
     version: 0.1.4
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2022-08-12T15:23:08.0707295+02:00"
+    created: "2022-08-12T15:33:44.8134789+02:00"
     description: A Helm chart for Kubernetes
     digest: 4befb347a95619baf5cfda5b2606ea54403acc72f855f3f6f61332cd0eb009d2
     name: laravel
@@ -103,7 +113,7 @@ entries:
     version: 0.1.3
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2022-08-12T15:23:08.0697282+02:00"
+    created: "2022-08-12T15:33:44.8134789+02:00"
     description: A Helm chart for Kubernetes
     digest: 2b2ececa888533cecab8abbc977a3bc48f161a52242b848cf279297af9f869de
     name: laravel
@@ -113,7 +123,7 @@ entries:
     version: 0.1.2
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2022-08-12T15:23:08.0445252+02:00"
+    created: "2022-08-12T15:33:44.7787113+02:00"
     description: A Helm chart for Kubernetes
     digest: bbe77de4f88e329dff3c0b5179b3299f055af2ce70ec2108541eb3157cf32b67
     name: laravel
@@ -123,7 +133,7 @@ entries:
     version: 0.1.1
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2022-08-12T15:23:08.0440091+02:00"
+    created: "2022-08-12T15:33:44.7782074+02:00"
     description: A Helm chart for Kubernetes
     digest: a4dbec762504c9f147893aa87633d37c015c32515d17db178706f0b0e9074f21
     name: laravel
@@ -131,4 +141,4 @@ entries:
     urls:
     - laravel-0.1.0.tgz
     version: 0.1.0
-generated: "2022-08-12T15:23:08.0434895+02:00"
+generated: "2022-08-12T15:33:44.7776072+02:00"

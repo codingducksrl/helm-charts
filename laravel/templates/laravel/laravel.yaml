@@ -36,12 +36,12 @@ spec:
     spec:
       serviceAccountName: {{ include "laravel.serviceAccountName" . }}
       securityContext:
-          {{- toYaml .Values.web.podSecurityContext | nindent 8 }}
+        {{- toYaml .Values.web.podSecurityContext | nindent 8 }}
       terminationGracePeriodSeconds: 10
       containers:
         - name: web
           securityContext:
-              {{- toYaml .Values.mariadb.podSecurityContext | nindent 12 }}
+            {{- toYaml .Values.mariadb.podSecurityContext | nindent 12 }}
           image: "{{ .Values.web.image }}"
           ports:
             - containerPort: 80
