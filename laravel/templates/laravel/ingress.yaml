@@ -31,8 +31,8 @@ spec:
     {{- else }}
     secretName: private-cert-secret
     {{- end }}
-{{- if .Values.web.ssh -}}
 ---
+{{- if .Values.web.ssh -}}
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRouteTCP
 metadata:
