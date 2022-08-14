@@ -3,6 +3,16 @@ entries:
   laravel:
   - apiVersion: v2
     appVersion: 1.16.0
+    created: "2022-08-14T18:04:15.1494386+02:00"
+    description: A Helm chart for Kubernetes
+    digest: a40e8bfc93706504aa97fc5ee06878be6b925e01e94464f8bc20e539ca696f72
+    name: laravel
+    type: application
+    urls:
+    - laravel-0.1.18.tgz
+    version: 0.1.18
+  - apiVersion: v2
+    appVersion: 1.16.0
     created: "2022-08-14T17:10:23.2164569+02:00"
     description: A Helm chart for Kubernetes
     digest: 016ff93584f22d2c968be9ef22c992cb3db227778948dc72e5c94f566059bb88
@@ -31,4 +41,4 @@ entries:
     urls:
     - laravel-0.1.15.tgz
     version: 0.1.15
-generated: "2022-08-14T17:10:23.1777093+02:00"
+generated: "2022-08-14T18:04:15.1389514+02:00"

@@ -62,6 +62,18 @@ spec:
               {{- with .Values.web.env }}
               {{- toYaml . | nindent 12 }}
               {{- end }}
+            - name: "DB_HOST"
+              value: {{ include "laravel.fullname" . }}-mariadb
+            - name: "DB_DATABASE"
+              value: {{ .Values.mariadb.databaseName }}
+            - name: "DB_USERNAME"
+              value: root
+            - name: "DB_PASSWORD"
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "laravel.fullname" . }}-mariadb-secret
+                  key: password
+                  optional: false
           volumeMounts:
             - name: persistence
               mountPath: /var/www/html/
