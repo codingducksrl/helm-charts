@@ -73,6 +73,9 @@ RUN chmod +x /usr/local/bin/start-container
 RUN chmod -R 2774 /var/www/html
 RUN chown -R sail:$WWWGROUP /var/www/html
 RUN mkdir /var/www/html/.ssh
+RUN mkdir /var/www/default
+RUN chmod -R 2774 /var/www/default
+RUN chown -R sail:$WWWGROUP /var/www/default
 
 EXPOSE 8000
 EXPOSE 3128

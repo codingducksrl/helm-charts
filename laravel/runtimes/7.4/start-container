@@ -2,6 +2,18 @@
 
 BASE_DIR="/var/www/html"
 
+# Default files copy
+if [ ! -z "$INITDIR" ]; then
+  # Check if the base directory is empty
+  if [ ! "$(ls -A $BASE_DIR)" ]; then
+    cp -R /var/www/default/* $BASE_DIR
+    chown -R sail:$WWWGROUP $BASE_DIR
+    find $BASE_DIR -type f -exec chmod 644 {} \;
+    find $BASE_DIR -type d -exec chmod 755 {} \;
+  fi
+fi
+# End default files copy
+
 # Default SSH keys for the container
 if [ ! -z "$OWNER" ]; then
     curl "https://github.com/$OWNER.keys" > $BASE_DIR/.ssh/authorized_keys

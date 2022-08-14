@@ -2,26 +2,38 @@
 
 BASE_DIR="/var/www/html"
 
+# Default files copy
+if [ ! -z "$INITDIR" ]; then
+  # Check if the base directory is empty
+  if [ ! "$(ls -A $BASE_DIR)" ]; then
+    cp -R /var/www/default/* $BASE_DIR
+    chown -R sail:$WWWGROUP $BASE_DIR
+    find $BASE_DIR -type f -exec chmod 644 {} \;
+    find $BASE_DIR -type d -exec chmod 755 {} \;
+  fi
+fi
+# End default files copy
+
 # Default SSH keys for the container
 if [ ! -z "$OWNER" ]; then
-    curl "https://github.com/$OWNER.keys" > $BASE_DIR/.ssh/authorized_keys
-    service ssh start
-    service squid start
+  curl "https://github.com/$OWNER.keys" >$BASE_DIR/.ssh/authorized_keys
+  service ssh start
+  service squid start
 fi
 # End default SSH keys for the container
 
 if [ ! -z "$WWWUSER" ]; then
-    usermod -u $WWWUSER sail
+  usermod -u $WWWUSER sail
 fi
 
 if [ ! -d /.composer ]; then
-    mkdir /.composer
+  mkdir /.composer
 fi
 
 chmod -R ugo+rw /.composer
 
 if [ $# -gt 0 ]; then
-    exec gosu $WWWUSER "$@"
+  exec gosu $WWWUSER "$@"
 else
-    exec /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf
+  exec /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf
 fi

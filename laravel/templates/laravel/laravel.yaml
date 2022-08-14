@@ -64,11 +64,7 @@ spec:
               {{- end }}
           volumeMounts:
             - name: persistence
-              mountPath: /var/www/html/bootstrap/cache/
-              subPath: cache
-            - name: persistence
-              mountPath: /var/www/html/storage/
-              subPath: storage
+              mountPath: /var/www/html/
   volumeClaimTemplates:
     - metadata:
         name: persistence
