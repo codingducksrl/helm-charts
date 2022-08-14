@@ -43,6 +43,7 @@ spec:
           securityContext:
             {{- toYaml .Values.mariadb.podSecurityContext | nindent 12 }}
           image: "{{ .Values.web.image }}"
+          imagePullPolicy: "Always"
           ports:
             - containerPort: 80
               name: http
@@ -51,6 +52,10 @@ spec:
               name: squid
             {{- end }}
           env:
+            {{- $envs := "" }}
+            {{- range .Values.web.env }}
+              {{- $envs = printf "%s;%s" $envs .name }}
+            {{- end }}
             - name: LARAVEL_APP_KEY
               valueFrom:
                 secretKeyRef:
@@ -59,9 +64,9 @@ spec:
                   optional: false
             - name: APP_KEY
               value: "base64:$(LARAVEL_APP_KEY)"
-              {{- with .Values.web.env }}
-              {{- toYaml . | nindent 12 }}
-              {{- end }}
+            {{- $mariadb := "" }}
+            {{- if .Values.mariadb.enabled }}
+            {{- $mariadb = "DB_HOST;DB_DATABASE;DB_USERNAME;DB_PASSWORD" }}
             - name: "DB_HOST"
               value: {{ include "laravel.fullname" . }}-mariadb
             - name: "DB_DATABASE"
@@ -74,6 +79,12 @@ spec:
                   name: {{ include "laravel.fullname" . }}-mariadb-secret
                   key: password
                   optional: false
+            {{- end }}
+            - name: "ENVS"
+              value: "{{ $mariadb }};APP_KEY{{ $envs }}"
+            {{- with .Values.web.env }}
+              {{- toYaml . | nindent 12 }}
+            {{- end }}
           volumeMounts:
             - name: persistence
               mountPath: /var/www/html/
