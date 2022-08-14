@@ -2,6 +2,10 @@
 
 BASE_DIR="/var/www/html"
 
+# Fixing permissions
+chmod -R 2774 /var/www/html
+chown -R sail:$WWWGROUP /var/www/html
+
 # Default files copy
 if [ ! -z "$INITDIR" ]; then
   # Check if the base directory is empty
