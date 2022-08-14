@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
 BASE_DIR="/var/www/html"
-ENVS="DB_HOST;DB_USERNAME;DB_PASSWORD;DB_DATABASE"
 
 # Environment variables configuration
 if [ ! -z "$ENVS" ]; then

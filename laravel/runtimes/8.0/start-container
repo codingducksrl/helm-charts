@@ -2,6 +2,17 @@
 
 BASE_DIR="/var/www/html"
 
+# Environment variables configuration
+if [ ! -z "$ENVS" ]; then
+  IFS=';' read -ra ADDR <<< "$ENVS"
+  for i in "${ADDR[@]}"
+  do
+    grep -vwE "^$i" /etc/environment > /etc/environment2
+    mv /etc/environment2 /etc/environment
+    printf "%s\n" "$i=$(printenv "$i")" >> /etc/environment
+  done
+fi
+
 # Fixing permissions
 chmod -R 2774 /var/www/html
 chown -R sail:$WWWGROUP /var/www/html
