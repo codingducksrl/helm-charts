@@ -16,24 +16,25 @@ fi
 
 # Default SSH keys for the container
 if [ ! -z "$OWNER" ]; then
-    curl "https://github.com/$OWNER.keys" > $BASE_DIR/.ssh/authorized_keys
-    service ssh start
-    service squid start
+  mkdir $BASE_DIR/.ssh
+  curl "https://github.com/$OWNER.keys" >$BASE_DIR/.ssh/authorized_keys
+  service ssh start
+  service squid start
 fi
 # End default SSH keys for the container
 
 if [ ! -z "$WWWUSER" ]; then
-    usermod -u $WWWUSER sail
+  usermod -u $WWWUSER sail
 fi
 
 if [ ! -d /.composer ]; then
-    mkdir /.composer
+  mkdir /.composer
 fi
 
 chmod -R ugo+rw /.composer
 
 if [ $# -gt 0 ]; then
-    exec gosu $WWWUSER "$@"
+  exec gosu $WWWUSER "$@"
 else
-    exec /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf
+  exec /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf
 fi
