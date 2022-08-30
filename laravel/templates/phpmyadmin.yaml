@@ -76,9 +76,9 @@ spec:
     - websecure
   routes:
   {{- if .Values.project.username }}
-    - match: Host("db-{{ .Values.project.name }}-{{ .Values.project.username }}.dev3.codingduck.it")
+    - match: Host("db-{{ .Values.project.name }}-{{ .Values.project.username }}.dev.codingduck.cloud")
   {{- else}}
-    - match: Host("db-{{ .Values.project.name }}.dev3.codingduck.it")
+    - match: Host("db-{{ .Values.project.name }}.dev.codingduck.cloud")
   {{- end}}
       kind: Rule
       services:

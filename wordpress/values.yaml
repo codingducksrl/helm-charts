@@ -1,0 +1,20 @@
+wordpress:
+  wordpressUsername: "admin"
+  wordpressEmail: "dev-ops@codingduck.it"
+  wordpressScheme: "https"
+  persistence:
+    storageClass: "ceph-block"
+    size: "1Gi"
+  volumePermissions:
+    enabled: true
+  service:
+    type: ClusterIP
+  mariadb:
+    enabled: true
+  diagnosticMode:
+    enabled: false
+# Basic project configuration.
+project:
+  name: "repo-di-prova" # The name of the repository.
+  public: false # Whether the server is publicly accessible or not.
+  username: false # The username of the repository. Set it to false for the development server.
