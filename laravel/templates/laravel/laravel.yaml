@@ -38,6 +38,10 @@ spec:
       securityContext:
         {{- toYaml .Values.web.podSecurityContext | nindent 8 }}
       terminationGracePeriodSeconds: 10
+      {{- if .Values.web.imagePullSecret }}
+      imagePullSecrets:
+        - name: {{ .Values.web.imagePullSecret }}
+      {{- end }}
       containers:
         - name: web
           securityContext:

@@ -3,27 +3,27 @@ entries:
   laravel:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2022-08-30T14:13:28.3863432+02:00"
+    created: "2022-09-02T11:11:16.9709631+02:00"
     description: A Helm chart for Kubernetes
-    digest: 87f96258659489d8ed659ab5804d5c73e43c2eb7ddb08ce5df74899a10f7b409
+    digest: cbf7c3266dc912760b97f4260ba633f52bcb8dd6532b25e08ef2de1459a04023
     name: laravel
     type: application
     urls:
-    - laravel-0.9.0.tgz
-    version: 0.9.0
+    - laravel-0.9.1.tgz
+    version: 0.9.1
   wordpress:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2022-08-30T14:13:28.395028+02:00"
+    created: "2022-09-02T11:11:16.9800006+02:00"
     dependencies:
     - name: wordpress
       repository: https://charts.bitnami.com/bitnami
       version: 15.0.16
     description: Wordpress helm chart
-    digest: 860d7c6e57fb9c1286d4bd030804ca0422ff8be7654430c48ace9731946295da
+    digest: 9ebfe61e6a65ec728cb5dcd314b360474c56050e164b77ec46dbe1ac45cd7c0a
     name: wordpress
     type: application
     urls:
     - wordpress-0.9.0.tgz
     version: 0.9.0
-generated: "2022-08-30T14:13:28.3770664+02:00"
+generated: "2022-09-02T11:11:16.9607222+02:00"

@@ -42,4 +42,5 @@ web:
   env: {} # Environment variables to add to the laravel pods
   storageClass: ceph-block # The name of the storage class to use
   image: "ghcr.io/codingducksrl/laravel:8.1"
+  imagePullSecret: false # The name of the secret to use to pull the image or false if no secret is needed
   ssh: false # Whether the server is accessible via SSH or not.
