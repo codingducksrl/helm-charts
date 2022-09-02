@@ -19,13 +19,17 @@ chown -R sail:$WWWGROUP /var/www/html
 
 # Default files copy
 if [ ! -z "$INITDIR" ]; then
-  # Check if the base directory is empty
-  if [ ! "$(ls -A $BASE_DIR)" ]; then
-    cp -R /var/www/default/* $BASE_DIR
-    chown -R sail:$WWWGROUP $BASE_DIR
-    find $BASE_DIR -type f -exec chmod 644 {} \;
-    find $BASE_DIR -type d -exec chmod 755 {} \;
-  fi
+  # Backup the storage directory and delete everything else
+  mv $BASE_DIR/storage /var/www/default/storagebackup
+  rm -r $BASE_DIR/*
+  # Copy the compiled code into the mounted directory
+  cp -R /var/www/default/* $BASE_DIR
+  # Restore the storage directory
+  mv /var/www/default/storagebackup $BASE_DIR/storage
+  # Fixing permissions
+  chown -R sail:$WWWGROUP $BASE_DIR
+  find $BASE_DIR -type f -exec chmod 644 {} \;
+  find $BASE_DIR -type d -exec chmod 755 {} \;
 fi
 # End default files copy
 
