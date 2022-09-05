@@ -43,11 +43,11 @@ spec:
   entryPoints:
     - websecure
   routes:
-    - match: HostSNI("ssh-{{ .Values.project.name }}.dev.codingduck.cloud")
+    - match: HostSNI("{{ .Values.project.name }}.ssh.codingduck.cloud")
       services:
         - name: {{ include "laravel.fullname" . }}-stunnel
           port: 3129
   tls:
     passthrough: true
-    secretName: private-cert-secret
+    secretName: ssh-cert-secret
 {{- end}}
