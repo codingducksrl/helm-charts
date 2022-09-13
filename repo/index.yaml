@@ -3,7 +3,17 @@ entries:
   laravel:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2022-09-13T10:10:10.814681+02:00"
+    created: "2022-09-13T10:50:53.0884812+02:00"
+    description: A Helm chart for Kubernetes
+    digest: 6798ee9b0bf125f5c393db1c595a0bb43d84bda305e590058ccac5b537039444
+    name: laravel
+    type: application
+    urls:
+    - laravel-0.9.5.tgz
+    version: 0.9.5
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2022-09-13T10:50:53.0804801+02:00"
     description: A Helm chart for Kubernetes
     digest: 0f7f249fc4a8e50aa54f93c2f8c6c7f15ff0fe35d991446e827b989f09afb2e0
     name: laravel
@@ -13,7 +23,7 @@ entries:
     version: 0.9.4
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2022-09-13T10:10:10.8061497+02:00"
+    created: "2022-09-13T10:50:53.0724811+02:00"
     description: A Helm chart for Kubernetes
     digest: 3a9ec99ad63cdee3989256e8ebb63e665bf0decdcb965647c8dd72fd273df11c
     name: laravel
@@ -23,7 +33,7 @@ entries:
     version: 0.9.3
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2022-09-13T10:10:10.7966511+02:00"
+    created: "2022-09-13T10:50:53.0639672+02:00"
     description: A Helm chart for Kubernetes
     digest: 888b618903e0b0ae3c2034a3cf6aa9297e85b3bd45136c714d79780e6fb7179f
     name: laravel
@@ -33,7 +43,7 @@ entries:
     version: 0.9.2
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2022-09-13T10:10:10.7880131+02:00"
+    created: "2022-09-13T10:50:53.0569682+02:00"
     description: A Helm chart for Kubernetes
     digest: cbf7c3266dc912760b97f4260ba633f52bcb8dd6532b25e08ef2de1459a04023
     name: laravel
@@ -44,16 +54,16 @@ entries:
   wordpress:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2022-09-13T10:10:10.8236809+02:00"
+    created: "2022-09-13T10:50:53.0964801+02:00"
     dependencies:
     - name: wordpress
       repository: https://charts.bitnami.com/bitnami
       version: 15.0.16
     description: Wordpress helm chart
-    digest: fefb8d231d16036d28711541a7c1c8ff559ee1d0496e2e8b7257069f8b30b562
+    digest: d744af4c2e5833157cfb3aa34e191ca69c70422b60ac509d031f0c9ae665f511
     name: wordpress
     type: application
     urls:
     - wordpress-0.9.0.tgz
     version: 0.9.0
-generated: "2022-09-13T10:10:10.775722+02:00"
+generated: "2022-09-13T10:50:53.047968+02:00"
