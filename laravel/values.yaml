@@ -44,3 +44,4 @@ web:
   image: "ghcr.io/codingducksrl/laravel:8.1"
   imagePullSecret: false # The name of the secret to use to pull the image or false if no secret is needed
   ssh: false # Whether the server is accessible via SSH or not.
+  vite: false # Whether the server is using Vite or not.

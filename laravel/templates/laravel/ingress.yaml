@@ -32,6 +32,39 @@ spec:
     secretName: private-cert-secret
     {{- end }}
 ---
+{{- if .Values.web.vite -}}
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: {{ include "laravel.fullname" . }}-vite-route
+  annotations:
+    {{- if .Values.project.public }}
+    kubernetes.io/ingress.class: public-ingress
+    {{- else }}
+    kubernetes.io/ingress.class: private-ingress
+    {{- end }}
+spec:
+  entryPoints:
+    - websecure
+  routes:
+  {{- if .Values.project.username }}
+    - match: Host("vite-{{ .Values.project.name }}-{{ .Values.project.username }}.{{ $endpoint }}.codingduck.cloud")
+  {{- else}}
+    - match: Host("vite-{{ .Values.project.name }}.{{ $endpoint }}.codingduck.cloud")
+  {{- end}}
+      kind: Rule
+      services:
+        - name: {{ include "laravel.fullname" . }}-web
+          port: 5173
+          kind: Service
+  tls:
+    {{- if .Values.project.public }}
+    secretName: public-cert-secret
+    {{- else }}
+    secretName: private-cert-secret
+    {{- end }}
+---
+{{- end}}
 {{- if .Values.web.ssh -}}
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRouteTCP
