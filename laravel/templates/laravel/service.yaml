@@ -17,6 +17,8 @@ spec:
       name: squid
     - port: 5173
       name: vite
+    - port: 6001
+      name: laravel-echo-server
 ---
 {{- if .Values.web.ssh -}}
 apiVersion: v1

@@ -15,6 +15,18 @@ spec:
   entryPoints:
     - websecure
   routes:
+{{- if .Values.web.websocket}}
+  {{- if .Values.project.username }}
+    - match: Host("{{ .Values.project.name }}-{{ .Values.project.username }}.{{ $endpoint }}.codingduck.cloud") && PathPrefix(`/app`)
+  {{- else}}
+    - match: Host("{{ .Values.project.name }}.{{ $endpoint }}.codingduck.cloud") && PathPrefix(`/app`)
+  {{- end}}
+      kind: Rule
+      services:
+        - name: {{ include "laravel.fullname" . }}-web
+          port: 6001
+          kind: Service
+{{- end}}
   {{- if .Values.project.username }}
     - match: Host("{{ .Values.project.name }}-{{ .Values.project.username }}.{{ $endpoint }}.codingduck.cloud")
   {{- else}}
@@ -25,6 +37,7 @@ spec:
         - name: {{ include "laravel.fullname" . }}-web
           port: 80
           kind: Service
+
   tls:
     {{- if .Values.project.public }}
     secretName: public-cert-secret
