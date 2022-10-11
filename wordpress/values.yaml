@@ -16,7 +16,7 @@ wordpress:
     port: 3306
     user: root
     database: wordpress
-    existingSecret: "{{ include 'wordpress.fullname' . }}-mariadb-secret"
+    existingSecret: test # WARNING - DYNAMICALLY PUT THE HOSTNAME WHEN USING THIS CHART {{ project name }}-wordpress-mariadb-secret
   commonAnnotations:
     argocd.argoproj.io/sync-wave: "50"
   diagnosticMode:
