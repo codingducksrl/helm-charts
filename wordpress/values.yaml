@@ -5,6 +5,7 @@ wordpress:
   global:
     storageClass: "ceph-block"
   persistence:
+    enabled: true
     storageClass: "ceph-block"
     size: "3Gi"
   volumePermissions:
