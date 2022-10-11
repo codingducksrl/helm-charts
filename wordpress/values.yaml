@@ -4,17 +4,49 @@ wordpress:
   wordpressScheme: "https"
   persistence:
     storageClass: "ceph-block"
-    size: "1Gi"
+    size: "3Gi"
   volumePermissions:
     enabled: true
   service:
     type: ClusterIP
   mariadb:
-    enabled: true
+    enabled: false
+  externalDatabase:
+    host: test # WARNING - DYNAMICALLY PUT THE HOSTNAME WHEN USING THIS CHART {{ project name }}-wordpress-mariadb
+    port: 3306
+    user: root
+    database: wordpress
+    existingSecret: "{{ include 'wordpress.fullname' . }}-mariadb-secret"
+  commonAnnotations:
+    argocd.argoproj.io/sync-wave: "50"
   diagnosticMode:
     enabled: false
 # Basic project configuration.
 project:
   name: "repo-di-prova" # The name of the repository.
   public: false # Whether the server is publicly accessible or not.
-  username: false # The username of the repository. Set it to false for the development server.
+
+phpmyadmin:
+  enabled: true # Enable PhpMyAdmin
+  version: 5.2.0 # PhpMyAdmin version
+  podAnnotations: { } # Annotations to add to the PhpMyAdmin pods
+  podSecurityContext: { } # Security context to add to the PhpMyAdmin pods
+
+mariadb:
+  enabled: true # Enable MariaDB
+  version: 10.8.3 # MariaDB version
+  databaseName: wordpress # Database name
+  storageClass: ceph-block # The name of the storage class to use
+  podAnnotations: {} # Annotations to add to the MariaDB pods
+  podSecurityContext: # Security context to add to the MariaDB pods
+    runAsUser: 0
+  env: {} # Environment variables to add to the MariaDB pods
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""

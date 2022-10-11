@@ -8,6 +8,7 @@ metadata:
     secret-generator.v1.mittwald.de/encoding: "base64"
     secret-generator.v1.mittwald.de/length: 32B
     secret-generator.v1.mittwald.de/autogenerate: key
+    argocd.argoproj.io/sync-wave: "1"
 ---
 apiVersion: apps/v1
 kind: StatefulSet
@@ -15,7 +16,8 @@ metadata:
   name: {{ include "laravel.fullname" . }}-web
   labels:
         {{- include "laravel.labels" . | nindent 4 }}
-
+  annotations:
+    argocd.argoproj.io/sync-wave: "30"
 spec:
   selector:
     matchLabels:

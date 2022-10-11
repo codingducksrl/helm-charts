@@ -1,18 +1,17 @@
-{{- if .Values.mariadb.enabled -}}
 # Service
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "laravel.fullname" . }}-mariadb
+  name: {{ include "wordpress.fullname" . }}-mariadb
   annotations:
     argocd.argoproj.io/sync-wave: "10"
   labels:
-    app: {{ include "laravel.fullname" . }}-mariadb
-    {{- include "laravel.labels" . | nindent 4 }}
+    app: {{ include "wordpress.fullname" . }}-mariadb
+    {{- include "wordpress.labels" . | nindent 4 }}
 spec:
   type: ClusterIP
   selector:
-    app: {{ include "laravel.fullname" . }}-mariadb
+    app: {{ include "wordpress.fullname" . }}-mariadb
   ports:
     - port: 3306
       name: sql
@@ -20,7 +19,7 @@ spec:
 apiVersion: v1
 kind: Secret
 metadata:
-  name: {{ include "laravel.fullname" . }}-mariadb-secret
+  name: {{ include "wordpress.fullname" . }}-mariadb-secret
   annotations:
     secret-generator.v1.mittwald.de/autogenerate: password
     argocd.argoproj.io/sync-wave: "10"
@@ -28,17 +27,17 @@ metadata:
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: {{ include "laravel.fullname" . }}-mariadb
+  name: {{ include "wordpress.fullname" . }}-mariadb
   annotations:
     argocd.argoproj.io/sync-wave: "20"
   labels:
-      {{- include "laravel.labels" . | nindent 4 }}
+      {{- include "wordpress.labels" . | nindent 4 }}
 spec:
   selector:
     matchLabels:
-      app: {{ include "laravel.fullname" . }}-mariadb # has to match .spec.template.metadata.labels
-      {{- include "laravel.selectorLabels" . | nindent 6 }}
-  serviceName: {{ include "laravel.fullname" . }}-mariadb
+      app: {{ include "wordpress.fullname" . }}-mariadb # has to match .spec.template.metadata.labels
+      {{- include "wordpress.selectorLabels" . | nindent 6 }}
+  serviceName: {{ include "wordpress.fullname" . }}-mariadb
   replicas: 1 # by default is 1
   minReadySeconds: 10 # by default is 0
   template:
@@ -48,10 +47,10 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        app: {{ include "laravel.fullname" . }}-mariadb # has to match .spec.selector.matchLabels
-        {{- include "laravel.selectorLabels" . | nindent 8 }}
+        app: {{ include "wordpress.fullname" . }}-mariadb # has to match .spec.selector.matchLabels
+        {{- include "wordpress.selectorLabels" . | nindent 8 }}
     spec:
-      serviceAccountName: {{ include "laravel.serviceAccountName" . }}
+      serviceAccountName: {{ include "wordpress.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.mariadb.podSecurityContext | nindent 8 }}
       terminationGracePeriodSeconds: 10
@@ -82,7 +81,7 @@ spec:
             - name: MYSQL_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "laravel.fullname" . }}-mariadb-secret
+                  name: {{ include "wordpress.fullname" . }}-mariadb-secret
                   key: password
                   optional: false
             - name: MYSQL_ROOT_HOST
@@ -113,4 +112,3 @@ spec:
         resources:
           requests:
             storage: 1Gi
-{{- end }}

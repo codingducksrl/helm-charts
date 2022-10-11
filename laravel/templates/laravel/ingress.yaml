@@ -17,9 +17,9 @@ spec:
   routes:
 {{- if .Values.web.websocket}}
   {{- if .Values.project.username }}
-    - match: Host("{{ .Values.project.name }}-{{ .Values.project.username }}.{{ $endpoint }}.codingduck.cloud") && PathPrefix(`/app`)
+    - match: Host("{{ .Values.project.name }}-{{ .Values.project.username }}.{{ $endpoint }}.codingduck.cloud") && PathPrefix("/app")
   {{- else}}
-    - match: Host("{{ .Values.project.name }}.{{ $endpoint }}.codingduck.cloud") && PathPrefix(`/app`)
+    - match: Host("{{ .Values.project.name }}.{{ $endpoint }}.codingduck.cloud") && PathPrefix("/app")
   {{- end}}
       kind: Rule
       services:

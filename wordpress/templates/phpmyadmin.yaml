@@ -1,0 +1,86 @@
+{{- if and (.Values.wordpress.mariadb.enabled) (.Values.phpmyadmin.enabled) -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "wordpress.fullname" . }}-phpmyadmin
+  labels:
+    app: {{ include "wordpress.fullname" . }}-phpmyadmin
+      {{- include "wordpress.labels" . | nindent 4 }}
+spec:
+  type: ClusterIP
+  selector:
+    app: {{ include "wordpress.fullname" . }}-phpmyadmin
+  ports:
+    - port: 80
+      name: http
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "wordpress.fullname" . }}-phpmyadmin
+  labels:
+    {{- include "wordpress.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ include "wordpress.fullname" . }}-phpmyadmin
+      {{- include "wordpress.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.phpmyadmin.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        app: {{ include "wordpress.fullname" . }}-phpmyadmin
+        {{- include "wordpress.selectorLabels" . | nindent 8 }}
+    spec:
+      serviceAccountName: {{ include "wordpress.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.phpmyadmin.podSecurityContext | nindent 8 }}
+      containers:
+        - name: "phpmyadmin"
+          securityContext:
+            {{- toYaml .Values.phpmyadmin.podSecurityContext | nindent 12 }}
+          image: "phpmyadmin/phpmyadmin:{{ .Values.phpmyadmin.version }}"
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: "PMA_HOST"
+              value: {{ include "wordpress.fullname" . }}-mariadb
+            - name: "PMA_USER"
+              value: root
+            - name: "PMA_PASSWORD" #TODO Check
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "wordpress.fullname" . }}-mariadb-secret
+                  key: password
+                  optional: false
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          startupProbe:
+            httpGet:
+              port: 80
+              path: /
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: {{ include "wordpress.fullname" . }}-phpmyadmin-route
+  annotations:
+    kubernetes.io/ingress.class: private-ingress
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host("{{ .Values.project.name }}.db.codingduck.cloud")
+      kind: Rule
+      services:
+        - name: {{ include "wordpress.fullname" . }}-phpmyadmin
+          port: 80
+          kind: Service
+  tls:
+    secretName: db-cert-secret
+{{- end }}

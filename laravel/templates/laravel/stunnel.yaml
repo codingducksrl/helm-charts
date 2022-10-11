@@ -5,6 +5,8 @@ metadata:
   name: {{ include "laravel.fullname" . }}-stunnel
   labels:
     {{- include "laravel.labels" . | nindent 4 }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "30"
 spec:
   replicas: 1
   selector:
