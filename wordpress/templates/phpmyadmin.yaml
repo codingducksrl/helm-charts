@@ -54,7 +54,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ include "wordpress.fullname" . }}-mariadb-secret
-                  key: password
+                  key: mariadb-password
                   optional: false
           ports:
             - name: http

@@ -21,7 +21,7 @@ kind: Secret
 metadata:
   name: {{ include "wordpress.fullname" . }}-mariadb-secret
   annotations:
-    secret-generator.v1.mittwald.de/autogenerate: password
+    secret-generator.v1.mittwald.de/autogenerate: mariadb-password
     argocd.argoproj.io/sync-wave: "10"
 ---
 apiVersion: apps/v1
@@ -82,7 +82,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ include "wordpress.fullname" . }}-mariadb-secret
-                  key: password
+                  key: mariadb-password
                   optional: false
             - name: MYSQL_ROOT_HOST
               value: '%'
