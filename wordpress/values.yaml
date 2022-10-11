@@ -2,6 +2,8 @@ wordpress:
   wordpressUsername: "admin"
   wordpressEmail: "dev-ops@codingduck.it"
   wordpressScheme: "https"
+  global:
+    storageClass: "ceph-block"
   persistence:
     storageClass: "ceph-block"
     size: "3Gi"
