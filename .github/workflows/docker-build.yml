@@ -10,7 +10,28 @@ env:
 jobs:
   laravel:
     name: Laravel
-    uses: ./.github/workflows/laravel/build-laravel.yml
+    uses: ./.github/workflows/build-runtime.yml
+    strategy:
+      matrix:
+        version: [ '7.4', '8.0', '8.1']
+    with:
+      runtime: ${{ matrix.version }}
+      framework: 'laravel'
+    secrets: inherit
+  stunnel:
+    name: Stunnel
+    uses: ./.github/workflows/build-image.yml
+    with:
+      framework: 'laravel'
+      image: 'stunnel'
+    secrets: inherit
   wordpress:
     name: Wordpress
     uses: ./.github/workflows/laravel/build-wordpress.yml
+    strategy:
+      matrix:
+        version: [ '6.0.2' ]
+    with:
+      runtime: ${{ matrix.version }}
+      framework: 'wordpress'
+    secrets: inherit

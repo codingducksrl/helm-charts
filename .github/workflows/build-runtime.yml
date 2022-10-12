@@ -2,6 +2,9 @@ name: Build runtime
 on:
   workflow_call:
     inputs:
+      framework:
+        required: true
+        type: string
       runtime:
         required: true
         type: string
@@ -26,7 +29,6 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
         with:
-          context: laravel/runtimes/${{ inputs.runtime }}
+          context: ${{ inputs.framework }}/runtimes/${{ inputs.runtime }}
           push: true
-          tags: ghcr.io/codingducksrl/laravel:${{ inputs.runtime }}
-          build-args: 'WWWGROUP=1000'
+          tags: ghcr.io/codingducksrl/${{ inputs.framework }}:${{ inputs.runtime }}
