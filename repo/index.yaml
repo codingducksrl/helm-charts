@@ -3,9 +3,9 @@ entries:
   laravel:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2022-10-12T09:23:05.3008606+02:00"
+    created: "2022-10-12T09:33:08.5975645+02:00"
     description: A Helm chart for Kubernetes
-    digest: 22efbf4a81fc09e29f82e977888e0f5ec38ed62725a996dff1853ee91b11225c
+    digest: 5226995b7ae40464b97c4186bea786e8cd585d813e5cd19cf7b85c68f38edbf0
     name: laravel
     type: application
     urls:
@@ -13,7 +13,7 @@ entries:
     version: 0.10.0
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2022-10-12T09:23:05.388944+02:00"
+    created: "2022-10-12T09:33:08.6555625+02:00"
     description: A Helm chart for Kubernetes
     digest: 12a285d1f70395ee595eacb7e8fc338bd9200d4218601ced056ab8cc4ea87c04
     name: laravel
@@ -23,7 +23,7 @@ entries:
     version: 0.9.6
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2022-10-12T09:23:05.3721428+02:00"
+    created: "2022-10-12T09:33:08.6455713+02:00"
     description: A Helm chart for Kubernetes
     digest: 6798ee9b0bf125f5c393db1c595a0bb43d84bda305e590058ccac5b537039444
     name: laravel
@@ -33,7 +33,7 @@ entries:
     version: 0.9.5
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2022-10-12T09:23:05.3586196+02:00"
+    created: "2022-10-12T09:33:08.6364216+02:00"
     description: A Helm chart for Kubernetes
     digest: 0f7f249fc4a8e50aa54f93c2f8c6c7f15ff0fe35d991446e827b989f09afb2e0
     name: laravel
@@ -43,7 +43,7 @@ entries:
     version: 0.9.4
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2022-10-12T09:23:05.3431063+02:00"
+    created: "2022-10-12T09:33:08.6256035+02:00"
     description: A Helm chart for Kubernetes
     digest: 3a9ec99ad63cdee3989256e8ebb63e665bf0decdcb965647c8dd72fd273df11c
     name: laravel
@@ -53,7 +53,7 @@ entries:
     version: 0.9.3
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2022-10-12T09:23:05.3294005+02:00"
+    created: "2022-10-12T09:33:08.6160547+02:00"
     description: A Helm chart for Kubernetes
     digest: 888b618903e0b0ae3c2034a3cf6aa9297e85b3bd45136c714d79780e6fb7179f
     name: laravel
@@ -63,7 +63,7 @@ entries:
     version: 0.9.2
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2022-10-12T09:23:05.3139351+02:00"
+    created: "2022-10-12T09:33:08.60623+02:00"
     description: A Helm chart for Kubernetes
     digest: cbf7c3266dc912760b97f4260ba633f52bcb8dd6532b25e08ef2de1459a04023
     name: laravel
@@ -74,7 +74,17 @@ entries:
   wordpress:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2022-10-12T09:23:05.4915903+02:00"
+    created: "2022-10-12T09:33:08.7323631+02:00"
+    description: Wordpress helm chart
+    digest: 1f1720d7a3e47cded8e3f42c82c81d938db545efc990eaebd89d6979982a7ba7
+    name: wordpress
+    type: application
+    urls:
+    - wordpress-0.11.1.tgz
+    version: 0.11.1
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2022-10-12T09:33:08.7323631+02:00"
     description: Wordpress helm chart
     digest: ba70ae5d754e1c49f9fd9f5cbdda3ba01714c86be21cf4ecfe58b05784c78edd
     name: wordpress
@@ -84,7 +94,7 @@ entries:
     version: 0.11.0
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2022-10-12T09:23:05.4835596+02:00"
+    created: "2022-10-12T09:33:08.7228158+02:00"
     dependencies:
     - name: wordpress
       repository: https://charts.bitnami.com/bitnami
@@ -98,7 +108,7 @@ entries:
     version: 0.10.6
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2022-10-12T09:23:05.4705381+02:00"
+    created: "2022-10-12T09:33:08.7133069+02:00"
     dependencies:
     - name: wordpress
       repository: https://charts.bitnami.com/bitnami
@@ -112,7 +122,7 @@ entries:
     version: 0.10.5
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2022-10-12T09:23:05.4570255+02:00"
+    created: "2022-10-12T09:33:08.7028168+02:00"
     dependencies:
     - name: wordpress
       repository: https://charts.bitnami.com/bitnami
@@ -126,7 +136,7 @@ entries:
     version: 0.10.4
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2022-10-12T09:23:05.441514+02:00"
+    created: "2022-10-12T09:33:08.694816+02:00"
     dependencies:
     - name: wordpress
       repository: https://charts.bitnami.com/bitnami
@@ -140,7 +150,7 @@ entries:
     version: 0.10.3
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2022-10-12T09:23:05.4300011+02:00"
+    created: "2022-10-12T09:33:08.6853061+02:00"
     dependencies:
     - name: wordpress
       repository: https://charts.bitnami.com/bitnami
@@ -154,7 +164,7 @@ entries:
     version: 0.10.2
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2022-10-12T09:23:05.4159772+02:00"
+    created: "2022-10-12T09:33:08.6740349+02:00"
     dependencies:
     - name: wordpress
       repository: https://charts.bitnami.com/bitnami
@@ -168,7 +178,7 @@ entries:
     version: 0.10.1
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2022-10-12T09:23:05.4020867+02:00"
+    created: "2022-10-12T09:33:08.6655143+02:00"
     dependencies:
     - name: wordpress
       repository: https://charts.bitnami.com/bitnami
@@ -182,7 +192,7 @@ entries:
     version: 0.10.0
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2022-10-12T09:23:05.5056396+02:00"
+    created: "2022-10-12T09:33:08.7418736+02:00"
     dependencies:
     - name: wordpress
       repository: https://charts.bitnami.com/bitnami
@@ -194,4 +204,4 @@ entries:
     urls:
     - wordpress-0.9.0.tgz
     version: 0.9.0
-generated: "2022-10-12T09:23:05.2883336+02:00"
+generated: "2022-10-12T09:33:08.5866729+02:00"
