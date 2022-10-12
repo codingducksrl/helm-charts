@@ -1,0 +1,38 @@
+# Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "wordpress.fullname" . }}-web
+  labels:
+    app: {{ include "wordpress.fullname" . }}-web
+    {{- include "wordpress.labels" . | nindent 4 }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "20"
+spec:
+  type: ClusterIP
+  selector:
+    app: {{ include "wordpress.fullname" . }}-web
+  ports:
+    - port: 80
+      name: http
+    - port: 3128
+      name: squid
+---
+{{- if .Values.web.ssh -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "wordpress.fullname" . }}-stunnel
+  labels:
+    app: {{ include "wordpress.fullname" . }}-stunnel
+    {{- include "wordpress.labels" . | nindent 4 }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "20"
+spec:
+  type: ClusterIP
+  selector:
+    app: {{ include "wordpress.fullname" . }}-stunnel
+  ports:
+    - port: 3129
+      name: stunnel
+{{- end -}}

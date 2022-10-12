@@ -1,0 +1,86 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "wordpress.fullname" . }}-web
+  labels:
+        {{- include "wordpress.labels" . | nindent 4 }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "30"
+spec:
+  selector:
+    matchLabels:
+      app: {{ include "wordpress.fullname" . }}-web # has to match .spec.template.metadata.labels
+        {{- include "wordpress.selectorLabels" . | nindent 6 }}
+  serviceName: {{ include "wordpress.fullname" . }}-web
+  replicas: 1 # by default is 1
+  minReadySeconds: 10 # by default is 0
+  template:
+    metadata:
+      {{- with .Values.web.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        app: {{ include "wordpress.fullname" . }}-web # has to match .spec.selector.matchLabels
+          {{- include "wordpress.selectorLabels" . | nindent 8 }}
+    spec:
+      serviceAccountName: {{ include "wordpress.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.web.podSecurityContext | nindent 8 }}
+      terminationGracePeriodSeconds: 10
+      {{- if .Values.web.imagePullSecret }}
+      imagePullSecrets:
+        - name: {{ .Values.web.imagePullSecret }}
+      {{- end }}
+      containers:
+        - name: web
+          securityContext:
+            {{- toYaml .Values.mariadb.podSecurityContext | nindent 12 }}
+          image: "{{ .Values.web.image }}"
+          imagePullPolicy: "Always"
+          ports:
+            - containerPort: 80
+              name: http
+            {{- if .Values.web.ssh }}
+            - containerPort: 3128
+              name: squid
+            {{- end }}
+          env:
+            {{- $envs := "" }}
+            {{- range .Values.web.env }}
+              {{- $envs = printf "%s;%s" $envs .name }}
+            {{- end }}
+
+            {{- $mariadb := "" }}
+            {{- if .Values.mariadb.enabled }}
+            {{- $mariadb = "WORDPRESS_DB_HOST;WORDPRESS_DB_NAME;WORDPRESS_DB_USER;WORDPRESS_DB_PASSWORD" }}
+            - name: "WORDPRESS_DB_HOST"
+              value: {{ include "wordpress.fullname" . }}-mariadb
+            - name: "WORDPRESS_DB_NAME"
+              value: {{ .Values.mariadb.databaseName }}
+            - name: "WORDPRESS_DB_USER"
+              value: root
+            - name: "WORDPRESS_DB_PASSWORD"
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "wordpress.fullname" . }}-mariadb-secret
+                  key: password
+                  optional: false
+            {{- end }}
+            - name: "ENVS"
+              value: "{{ $mariadb }};{{ $envs }}"
+            {{- with .Values.web.env }}
+              {{- toYaml . | nindent 12 }}
+            {{- end }}
+          volumeMounts:
+            - name: persistence
+              mountPath: /var/www/html
+  volumeClaimTemplates:
+    - metadata:
+        name: persistence
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        storageClassName: {{ .Values.web.storageClass }}
+        resources:
+          requests:
+            storage: {{ .Values.web.storage }}
