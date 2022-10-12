@@ -8,8 +8,8 @@ RUN apt update \
 COPY sshd_config /etc/ssh/sshd_config
 COPY squid.conf /etc/squid/squid.conf
 
-COPY fix-ssh.sh /bin/fix-ssh.sh
-RUN chmod +x /bin/fix-ssh.sh
+COPY fix-ssh.sh /bin/fix-ssh
+RUN chmod +x /bin/fix-ssh
 
 RUN chsh www-data -s /bin/bash
 
