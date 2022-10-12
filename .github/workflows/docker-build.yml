@@ -27,7 +27,7 @@ jobs:
     secrets: inherit
   wordpress:
     name: Wordpress
-    uses: ./.github/workflows/laravel/build-wordpress.yml
+    uses: ./.github/workflows/build-runtime.yml
     strategy:
       matrix:
         version: [ '6.0.2' ]
