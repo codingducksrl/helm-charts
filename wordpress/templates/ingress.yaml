@@ -31,3 +31,27 @@ spec:
     {{- else }}
     secretName: private-cert-secret
     {{- end }}
+---
+{{- if .Values.web.ssh -}}
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRouteTCP
+metadata:
+  name: {{ include "wordpress.fullname" . }}-ssh-route
+  annotations:
+    kubernetes.io/ingress.class: private-ingress
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    {{- if .Values.project.username }}
+    - match: HostSNI("{{ .Values.project.name }}-{{ .Values.project.username }}.ssh.codingduck.cloud")
+    {{- else}}
+    - match: HostSNI("{{ .Values.project.name }}.ssh.codingduck.cloud")
+    {{- end}}
+      services:
+        - name: {{ include "wordpress.fullname" . }}-stunnel
+          port: 3129
+  tls:
+    passthrough: true
+    secretName: ssh-cert-secret
+{{- end}}
