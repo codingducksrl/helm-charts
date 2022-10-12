@@ -8,27 +8,9 @@ env:
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-  runtime-74:
-    name: Runtime 7.4
-    uses: ./.github/workflows/build-runtime.yml
-    with:
-      runtime: '7.4'
-    secrets: inherit
-  runtime-80:
-    name: Runtime 8.0
-    uses: ./.github/workflows/build-runtime.yml
-    with:
-      runtime: '8.0'
-    secrets: inherit
-  runtime-81:
-    name: Runtime 8.1
-    uses: ./.github/workflows/build-runtime.yml
-    with:
-      runtime: '8.1'
-    secrets: inherit
-  stunnel:
-    name: Stunnel
-    uses: ./.github/workflows/build-image.yml
-    with:
-      image: 'stunnel'
-    secrets: inherit
+  laravel:
+    name: Laravel
+    uses: ./.github/workflows/laravel/build-laravel.yml
+  wordpress:
+    name: Wordpress
+    uses: ./.github/workflows/laravel/build-wordpress.yml

@@ -3,9 +3,9 @@ entries:
   laravel:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2022-10-12T09:48:58.9426494+02:00"
+    created: "2022-10-12T10:09:38.566643+02:00"
     description: A Helm chart for Kubernetes
-    digest: b70567ef954a552c2b93396ca5b31bcdc39b6cdbf289ac22214cd42463fa95cd
+    digest: ea42cf5b0baab65abaf3e7bc52f4b11addc362bc366ce9293ef4fdd9c3b3bf30
     name: laravel
     type: application
     urls:
@@ -14,7 +14,17 @@ entries:
   wordpress:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2022-10-12T09:48:58.9426494+02:00"
+    created: "2022-10-12T10:09:38.5707299+02:00"
+    description: Wordpress helm chart
+    digest: 39cd06fff315444fdb48da26c487a865e8ddbda91cdc253aab5a5d2ff4c5a251
+    name: wordpress
+    type: application
+    urls:
+    - wordpress-0.11.4.tgz
+    version: 0.11.4
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2022-10-12T10:09:38.5676383+02:00"
     description: Wordpress helm chart
     digest: b314231776b1950f6b088d4f56501dd8b232d9a774b91039e4fc96f497012698
     name: wordpress
@@ -24,7 +34,7 @@ entries:
     version: 0.11.3
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2022-10-12T09:48:58.9426494+02:00"
+    created: "2022-10-12T10:09:38.5676383+02:00"
     description: Wordpress helm chart
     digest: 89fb61cfa4ba98274cebb7450ab5caeb0bf2527b58d57a56a1514c0a8495fd86
     name: wordpress
@@ -32,4 +42,4 @@ entries:
     urls:
     - wordpress-0.11.2.tgz
     version: 0.11.2
-generated: "2022-10-12T09:48:58.9306343+02:00"
+generated: "2022-10-12T10:09:38.5564453+02:00"

@@ -33,7 +33,7 @@ web:
   podSecurityContext: {}
   env: {} # Environment variables to add to the laravel pods
   storageClass: ceph-block # The name of the storage class to use
-  image: "wordpress:6.0.2"
+  image: "ghcr.io/codingducksrl/wordpress:6.0.2"
   imagePullSecret: false # The name of the secret to use to pull the image or false if no secret is needed
   ssh: false # Whether the server is accessible via SSH or not.
   storage: "1Gi"

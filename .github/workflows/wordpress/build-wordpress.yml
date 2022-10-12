@@ -1,0 +1,16 @@
+name: Wordpress build
+
+on:
+  workflow_call:
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  runtime-602:
+    name: Runtime 6.0.2
+    uses: ./.github/workflows/wordpress/build-runtime.yml
+    with:
+      runtime: '6.0.2'
+    secrets: inherit
