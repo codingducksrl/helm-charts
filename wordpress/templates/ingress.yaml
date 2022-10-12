@@ -22,7 +22,7 @@ spec:
   {{- end }}
       kind: Rule
       services:
-        - name: {{ include "common.names.fullname" . }}
+        - name:  {{ include "wordpress.fullname" . }}-web
           port: 80
           kind: Service
   tls:
