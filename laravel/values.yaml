@@ -46,3 +46,4 @@ web:
   ssh: false # Whether the server is accessible via SSH or not.
   vite: false # Whether the server is using Vite or not.
   websocket: false # Whether the server is using WebSockets or not.
+  storage: 1Gi

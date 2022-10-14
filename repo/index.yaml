@@ -3,7 +3,17 @@ entries:
   laravel:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2022-10-12T10:28:49.2903754+02:00"
+    created: "2022-10-14T14:49:19.0531528+02:00"
+    description: A Helm chart for Kubernetes
+    digest: 2e36486737575aa1a87be5e0cd438584880eef9933977ddf4687f0297de33176
+    name: laravel
+    type: application
+    urls:
+    - laravel-0.10.1.tgz
+    version: 0.10.1
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2022-10-14T14:49:19.0447919+02:00"
     description: A Helm chart for Kubernetes
     digest: f3b50f9d1666c0447f61bd44174e049d73cb6fa0cab1933b79e9e44b641af85f
     name: laravel
@@ -14,9 +24,9 @@ entries:
   wordpress:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2022-10-12T10:28:49.2973743+02:00"
+    created: "2022-10-14T14:49:19.0604956+02:00"
     description: Wordpress helm chart
-    digest: e370f165913d92f9a656288882d7d80c5a1a698918f140d07f7897cc26bcf4bc
+    digest: bbff8d18c26f5d16d2a252cb19c15e041f223b116c3a9c05fca88ee92434e933
     name: wordpress
     type: application
     urls:
@@ -24,7 +34,7 @@ entries:
     version: 0.12.0
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2022-10-12T10:28:49.2953735+02:00"
+    created: "2022-10-14T14:49:19.0573482+02:00"
     description: Wordpress helm chart
     digest: 39cd06fff315444fdb48da26c487a865e8ddbda91cdc253aab5a5d2ff4c5a251
     name: wordpress
@@ -34,7 +44,7 @@ entries:
     version: 0.11.4
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2022-10-12T10:28:49.2923789+02:00"
+    created: "2022-10-14T14:49:19.0541967+02:00"
     description: Wordpress helm chart
     digest: b314231776b1950f6b088d4f56501dd8b232d9a774b91039e4fc96f497012698
     name: wordpress
@@ -44,7 +54,7 @@ entries:
     version: 0.11.3
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2022-10-12T10:28:49.2913752+02:00"
+    created: "2022-10-14T14:49:19.0536757+02:00"
     description: Wordpress helm chart
     digest: 89fb61cfa4ba98274cebb7450ab5caeb0bf2527b58d57a56a1514c0a8495fd86
     name: wordpress
@@ -52,4 +62,4 @@ entries:
     urls:
     - wordpress-0.11.2.tgz
     version: 0.11.2
-generated: "2022-10-12T10:28:49.2818645+02:00"
+generated: "2022-10-14T14:49:19.0340826+02:00"

@@ -102,4 +102,4 @@ spec:
         storageClassName: {{ .Values.web.storageClass }}
         resources:
           requests:
-            storage: 1Gi
+            storage: {{ .Values.web.storage }}
