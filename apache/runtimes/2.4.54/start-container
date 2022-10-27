@@ -27,7 +27,7 @@ if [ ! -z "$INITDIR" ]; then
   rm -r $BASE_DIR/*
   echo "Copying files...[2/5]"
   # Copy the compiled code into the mounted directory
-  cp -R /usr/local/apache2/default/* $BASE_DIR
+  cp -R /usr/local/apache2/default/. $BASE_DIR
   echo "Copying files...[3/5]"
   # Restore the storage directory
   mv /usr/local/apache2/default/storagebackup $BASE_DIR/storage
