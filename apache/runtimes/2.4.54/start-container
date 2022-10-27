@@ -17,7 +17,7 @@ fi
 echo "Fixing permissions"
 # Fixing permissions
 chmod -R 2774 $BASE_DIR
-chown -R sail:www-data $BASE_DIR
+chown -R www-data:www-data $BASE_DIR
 
 # Default files copy
 if [ ! -z "$INITDIR" ]; then
@@ -33,7 +33,7 @@ if [ ! -z "$INITDIR" ]; then
   mv /usr/local/apache2/default/storagebackup $BASE_DIR/storage
   echo "Copying files...[4/5]"
   # Fixing permissions
-  chown -R sail:www-data $BASE_DIR
+  chown -R www-data:www-data $BASE_DIR
   find $BASE_DIR -type f -exec chmod 664 {} \;
   find $BASE_DIR -type d -exec chmod 775 {} \;
   echo "Copying files...[5/5]"
@@ -45,7 +45,7 @@ if [ ! -z "$OWNER" ]; then
   echo "Configuring SSH"
   mkdir $BASE_DIR/.ssh
   curl "https://github.com/$OWNER.keys" >$BASE_DIR/.ssh/authorized_keys
-  chown -R sail:sail $BASE_DIR/.ssh
+  chown -R www-data:www-data $BASE_DIR/.ssh
   chmod 700 $BASE_DIR/.ssh
   chmod 700 $BASE_DIR/.ssh/*
   service ssh start
@@ -55,7 +55,7 @@ fi
 
 if [ ! -z "$WWWUSER" ]; then
   echo "Modifying user"
-  usermod -u $WWWUSER sail
+  usermod -u $WWWUSER www-data
 fi
 
 if [ ! -d /.composer ]; then

@@ -2,8 +2,6 @@ FROM httpd:2.4.54-bullseye
 
 LABEL maintainer="Guglielmo Frati"
 
-ARG WWWGROUP=33
-ARG SAILGROUP=1003
 ARG NODE_VERSION=16
 ARG POSTGRES_VERSION=14
 
@@ -51,10 +49,11 @@ RUN apt-get update \
 
 #RUN setcap "cap_net_bind_service=+ep" /usr/bin/php8.1
 
-RUN groupadd --force -g $SAILGROUP sail
+#RUN groupadd --force -g $SAILGROUP sail
 
 # Custom part
-RUN useradd -s /bin/bash --no-user-group -d /usr/local/apache2/htdocs/ -g $SAILGROUP -G $WWWGROUP -u 1337 sail
+RUN chsh www-data -s /bin/bash
+RUN usermod -d /usr/local/apache2/htdocs www-data
 
 RUN apt update \
     && apt install -y openssh-server squid\
@@ -72,11 +71,11 @@ RUN chmod +x /usr/local/bin/start-container
 
 # Custom part
 RUN chmod -R 2774 /usr/local/apache2/htdocs
-RUN chown -R sail:$WWWGROUP /usr/local/apache2/htdocs
+RUN chown -R www-data:www-data /usr/local/apache2/htdocs
 RUN mkdir /usr/local/apache2/htdocs/.ssh
 RUN mkdir /usr/local/apache2/default
 RUN chmod -R 2774 /usr/local/apache2/default
-RUN chown -R sail:$WWWGROUP /usr/local/apache2/default
+RUN chown -R www-data:www-data /usr/local/apache2/default
 
 EXPOSE 80
 EXPOSE 3128
