@@ -45,6 +45,8 @@ if [ ! -z "$OWNER" ]; then
   echo "Configuring SSH"
   mkdir $BASE_DIR/.ssh
   curl "https://github.com/$OWNER.keys" >$BASE_DIR/.ssh/authorized_keys
+  chmod 700 $BASE_DIR/.ssh
+  chmod 700 $BASE_DIR/.ssh/*
   service ssh start
   service squid start
 fi
