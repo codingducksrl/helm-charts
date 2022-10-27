@@ -77,6 +77,13 @@ RUN mkdir /usr/local/apache2/default
 RUN chmod -R 2774 /usr/local/apache2/default
 RUN chown -R www-data:www-data /usr/local/apache2/default
 
+RUN sed -i '/LoadModule rewrite_module/s/^#//g' /usr/local/apache2/conf/httpd.conf
+
+RUN { \
+  echo 'IncludeOptional conf.d/*.conf'; \
+} >> /usr/local/apache2/conf/httpd.conf \
+  && mkdir /usr/local/apache2/conf.d
+
 EXPOSE 80
 EXPOSE 3128
 # End custom part
