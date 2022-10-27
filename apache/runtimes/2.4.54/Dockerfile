@@ -84,6 +84,9 @@ RUN { \
 } >> /usr/local/apache2/conf/httpd.conf \
   && mkdir /usr/local/apache2/conf.d
 
+RUN sed -i '/<Directory \"\/usr\/local\/apache2\/htdocs\">/,/<\/Directory>/ s/AllowOverride None/AllowOverride All/' /usr/local/apache2/conf/httpd.conf
+
+
 EXPOSE 80
 EXPOSE 3128
 # End custom part
