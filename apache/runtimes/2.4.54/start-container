@@ -16,8 +16,8 @@ fi
 
 echo "Fixing permissions"
 # Fixing permissions
-chmod -R 2774 /usr/local/apache2/htdocs
-chown -R sail:$WWWGROUP /usr/local/apache2/htdocs
+chmod -R 2774 $BASE_DIR
+chown -R sail:www-data $BASE_DIR
 
 # Default files copy
 if [ ! -z "$INITDIR" ]; then
@@ -33,7 +33,7 @@ if [ ! -z "$INITDIR" ]; then
   mv /usr/local/apache2/default/storagebackup $BASE_DIR/storage
   echo "Copying files...[4/5]"
   # Fixing permissions
-  chown -R sail:$WWWGROUP $BASE_DIR
+  chown -R sail:www-data $BASE_DIR
   find $BASE_DIR -type f -exec chmod 664 {} \;
   find $BASE_DIR -type d -exec chmod 775 {} \;
   echo "Copying files...[5/5]"
