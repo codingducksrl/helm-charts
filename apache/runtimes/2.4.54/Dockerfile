@@ -2,7 +2,7 @@ FROM httpd:2.4.54-bullseye
 
 LABEL maintainer="Guglielmo Frati"
 
-ARG WWWGROUP=1003
+ARG WWWGROUP=33
 ARG NODE_VERSION=16
 ARG POSTGRES_VERSION=14
 
@@ -50,7 +50,7 @@ RUN apt-get update \
 
 #RUN setcap "cap_net_bind_service=+ep" /usr/bin/php8.1
 
-RUN groupadd --force -g $WWWGROUP sail
+#RUN groupadd --force -g $WWWGROUP sail
 
 # Custom part
 RUN useradd -s /bin/bash --no-user-group -d /usr/local/apache2/htdocs/ -g $WWWGROUP -u 1337 sail

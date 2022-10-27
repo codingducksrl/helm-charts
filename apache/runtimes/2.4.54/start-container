@@ -34,8 +34,8 @@ if [ ! -z "$INITDIR" ]; then
   echo "Copying files...[4/5]"
   # Fixing permissions
   chown -R sail:$WWWGROUP $BASE_DIR
-  find $BASE_DIR -type f -exec chmod 644 {} \;
-  find $BASE_DIR -type d -exec chmod 755 {} \;
+  find $BASE_DIR -type f -exec chmod 664 {} \;
+  find $BASE_DIR -type d -exec chmod 775 {} \;
   echo "Copying files...[5/5]"
 fi
 # End default files copy
