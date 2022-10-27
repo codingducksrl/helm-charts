@@ -1,0 +1,71 @@
+#!/usr/bin/env bash
+
+BASE_DIR="/usr/local/apache2/htdocs"
+echo "Initializing..."
+# Environment variables configuration
+if [ ! -z "$ENVS" ]; then
+  echo "Fixing ENV variables"
+  IFS=';' read -ra ADDR <<< "$ENVS"
+  for i in "${ADDR[@]}"
+  do
+    grep -vwE "^$i" /etc/environment > /etc/environment2
+    mv /etc/environment2 /etc/environment
+    printf "%s\n" "$i=$(printenv "$i")" >> /etc/environment
+  done
+fi
+
+echo "Fixing permissions"
+# Fixing permissions
+chmod -R 2774 /usr/local/apache2/htdocs
+chown -R sail:$WWWGROUP /usr/local/apache2/htdocs
+
+# Default files copy
+if [ ! -z "$INITDIR" ]; then
+  echo "Copying files...[1/5]"
+  # Backup the storage directory and delete everything else
+  mv $BASE_DIR/storage /usr/local/apache2/default/storagebackup
+  rm -r $BASE_DIR/*
+  echo "Copying files...[2/5]"
+  # Copy the compiled code into the mounted directory
+  cp -R /usr/local/apache2/default/* $BASE_DIR
+  echo "Copying files...[3/5]"
+  # Restore the storage directory
+  mv /usr/local/apache2/default/storagebackup $BASE_DIR/storage
+  echo "Copying files...[4/5]"
+  # Fixing permissions
+  chown -R sail:$WWWGROUP $BASE_DIR
+  find $BASE_DIR -type f -exec chmod 644 {} \;
+  find $BASE_DIR -type d -exec chmod 755 {} \;
+  echo "Copying files...[5/5]"
+fi
+# End default files copy
+
+# Default SSH keys for the container
+if [ ! -z "$OWNER" ]; then
+  echo "Configuring SSH"
+  mkdir $BASE_DIR/.ssh
+  curl "https://github.com/$OWNER.keys" >$BASE_DIR/.ssh/authorized_keys
+  service ssh start
+  service squid start
+fi
+# End default SSH keys for the container
+
+if [ ! -z "$WWWUSER" ]; then
+  echo "Modifying user"
+  usermod -u $WWWUSER sail
+fi
+
+if [ ! -d /.composer ]; then
+  echo "Creating composer directory"
+  mkdir /.composer
+fi
+
+echo "Doing thighs..."
+chmod -R ugo+rw /.composer
+
+echo "Done :)"
+if [ $# -gt 0 ]; then
+  exec gosu $WWWUSER "$@"
+else
+  exec /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf
+fi

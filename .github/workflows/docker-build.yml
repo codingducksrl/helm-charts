@@ -36,3 +36,13 @@ jobs:
       runtime: ${{ matrix.version }}
       framework: 'wordpress'
     secrets: inherit
+  apache:
+    name: Apache
+    uses: ./.github/workflows/build-runtime.yml
+    strategy:
+      matrix:
+        version: [ '2.4.54' ]
+    with:
+      runtime: ${{ matrix.version }}
+      framework: 'apache'
+    secrets: inherit

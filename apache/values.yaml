@@ -1,0 +1,47 @@
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+
+# Basic project configuration.
+project:
+  name: "repo-di-prova" # The name of the repository.
+  public: false # Whether the server is publicly accessible or not.
+  username: false # The username of the repository. Set it to false for the development server.
+
+# MariaDB configuration
+mariadb:
+  enabled: true # Enable MariaDB
+  version: 10.8.3 # MariaDB version
+  databaseName: laravel # Database name
+  storageClass: ceph-block # The name of the storage class to use
+  podAnnotations: {} # Annotations to add to the MariaDB pods
+  podSecurityContext: # Security context to add to the MariaDB pods
+    runAsUser: 0
+  env: {} # Environment variables to add to the MariaDB pods
+
+  # PhpMyAdmin configuration
+  phpmyadmin:
+    enabled: true # Enable PhpMyAdmin
+    version: 5.2.0 # PhpMyAdmin version
+    podAnnotations: {} # Annotations to add to the PhpMyAdmin pods
+    podSecurityContext: {} # Security context to add to the PhpMyAdmin pods
+
+# Laravel pod configuration
+web:
+  podAnnotations: {} # Annotations to add to the laravel pods
+  podSecurityContext: {}
+  env: {} # Environment variables to add to the laravel pods
+  storageClass: ceph-block # The name of the storage class to use
+  image: "ghcr.io/codingducksrl/laravel:8.1"
+  imagePullSecret: false # The name of the secret to use to pull the image or false if no secret is needed
+  ssh: false # Whether the server is accessible via SSH or not.
+  storage: 1Gi

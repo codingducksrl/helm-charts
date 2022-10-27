@@ -1,0 +1,116 @@
+{{- if .Values.mariadb.enabled -}}
+# Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "apache.fullname" . }}-mariadb
+  annotations:
+    argocd.argoproj.io/sync-wave: "10"
+  labels:
+    app: {{ include "apache.fullname" . }}-mariadb
+    {{- include "apache.labels" . | nindent 4 }}
+spec:
+  type: ClusterIP
+  selector:
+    app: {{ include "apache.fullname" . }}-mariadb
+  ports:
+    - port: 3306
+      name: sql
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ include "apache.fullname" . }}-mariadb-secret
+  annotations:
+    secret-generator.v1.mittwald.de/autogenerate: password
+    argocd.argoproj.io/sync-wave: "10"
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "apache.fullname" . }}-mariadb
+  annotations:
+    argocd.argoproj.io/sync-wave: "20"
+  labels:
+      {{- include "apache.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ include "apache.fullname" . }}-mariadb # has to match .spec.template.metadata.labels
+      {{- include "apache.selectorLabels" . | nindent 6 }}
+  serviceName: {{ include "apache.fullname" . }}-mariadb
+  replicas: 1 # by default is 1
+  minReadySeconds: 10 # by default is 0
+  template:
+    metadata:
+      {{- with .Values.mariadb.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        app: {{ include "apache.fullname" . }}-mariadb # has to match .spec.selector.matchLabels
+        {{- include "apache.selectorLabels" . | nindent 8 }}
+    spec:
+      serviceAccountName: {{ include "apache.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.mariadb.podSecurityContext | nindent 8 }}
+      terminationGracePeriodSeconds: 10
+      initContainers:
+        - name: take-data-dir-ownership
+          securityContext:
+            {{- toYaml .Values.mariadb.podSecurityContext | nindent 12 }}
+          image: alpine:3
+          # Give `mysql` user permissions a mounted volume
+          # https://stackoverflow.com/a/51195446/4360433
+          command:
+            - chown
+            - -R
+            - 999:999
+            - /var/lib/mysql
+          volumeMounts:
+            - name: database
+              mountPath: /var/lib/mysql
+      containers:
+        - name: mariadb
+          securityContext:
+            {{- toYaml .Values.mariadb.podSecurityContext | nindent 12 }}
+          image: "mariadb:{{ .Values.mariadb.version }}"
+          ports:
+            - containerPort: 3306
+              name: sql
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "apache.fullname" . }}-mariadb-secret
+                  key: password
+                  optional: false
+            - name: MYSQL_ROOT_HOST
+              value: '%'
+            - name: MYSQL_DATABASE
+              value: {{ .Values.mariadb.databaseName }}
+            {{- with .Values.mariadb.env }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+          startupProbe:
+            exec:
+              command:
+                - bash
+                - -c
+                - mysqladmin status -p$MYSQL_ROOT_PASSWORD
+            failureThreshold: 3
+            successThreshold: 1
+            periodSeconds: 10
+          volumeMounts:
+            - name: database
+              mountPath: /var/lib/mysql
+  volumeClaimTemplates:
+    - metadata:
+        name: database
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        storageClassName: {{ .Values.mariadb.storageClass }}
+        resources:
+          requests:
+            storage: 1Gi
+{{- end }}

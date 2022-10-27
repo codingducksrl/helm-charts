@@ -1,0 +1,38 @@
+# Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "apache.fullname" . }}-web
+  labels:
+    app: {{ include "apache.fullname" . }}-web
+    {{- include "apache.labels" . | nindent 4 }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "20"
+spec:
+  type: ClusterIP
+  selector:
+    app: {{ include "apache.fullname" . }}-web
+  ports:
+    - port: 80
+      name: http
+    - port: 3128
+      name: squid
+---
+{{- if .Values.web.ssh -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "apache.fullname" . }}-stunnel
+  labels:
+    app: {{ include "apache.fullname" . }}-stunnel
+    {{- include "apache.labels" . | nindent 4 }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "20"
+spec:
+  type: ClusterIP
+  selector:
+    app: {{ include "apache.fullname" . }}-stunnel
+  ports:
+    - port: 3129
+      name: stunnel
+{{- end -}}

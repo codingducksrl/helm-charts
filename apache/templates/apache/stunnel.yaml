@@ -1,0 +1,34 @@
+{{- if .Values.web.ssh -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "apache.fullname" . }}-stunnel
+  labels:
+    {{- include "apache.labels" . | nindent 4 }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "30"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ include "apache.fullname" . }}-stunnel
+      {{- include "apache.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "apache.fullname" . }}-stunnel
+        {{- include "apache.selectorLabels" . | nindent 8 }}
+    spec:
+      serviceAccountName: {{ include "apache.serviceAccountName" . }}
+      containers:
+        - name: "stunnel"
+          image: "ghcr.io/codingducksrl/stunnel"
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: "SSH_HOST"
+              value: {{ include "apache.fullname" . }}-web
+          ports:
+            - name: stunnel
+              containerPort: 3129
+
+{{- end -}}

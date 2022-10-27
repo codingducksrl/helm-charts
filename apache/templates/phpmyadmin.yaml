@@ -1,0 +1,95 @@
+{{- if and (.Values.mariadb.enabled) (.Values.mariadb.phpmyadmin.enabled) -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "apache.fullname" . }}-phpmyadmin
+  annotations:
+    argocd.argoproj.io/sync-wave: "30"
+  labels:
+    app: {{ include "apache.fullname" . }}-phpmyadmin
+      {{- include "apache.labels" . | nindent 4 }}
+spec:
+  type: ClusterIP
+  selector:
+    app: {{ include "apache.fullname" . }}-phpmyadmin
+  ports:
+    - port: 80
+      name: http
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "apache.fullname" . }}-phpmyadmin
+  annotations:
+    argocd.argoproj.io/sync-wave: "35"
+  labels:
+    {{- include "apache.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ include "apache.fullname" . }}-phpmyadmin
+      {{- include "apache.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.mariadb.phpmyadmin.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        app: {{ include "apache.fullname" . }}-phpmyadmin
+        {{- include "apache.selectorLabels" . | nindent 8 }}
+    spec:
+      serviceAccountName: {{ include "apache.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.mariadb.phpmyadmin.podSecurityContext | nindent 8 }}
+      containers:
+        - name: "phpmyadmin"
+          securityContext:
+            {{- toYaml .Values.mariadb.phpmyadmin.podSecurityContext | nindent 12 }}
+          image: "phpmyadmin/phpmyadmin:{{ .Values.mariadb.phpmyadmin.version }}"
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: "PMA_HOST"
+              value: {{ include "apache.fullname" . }}-mariadb
+            - name: "PMA_USER"
+              value: root
+            - name: "PMA_PASSWORD"
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "apache.fullname" . }}-mariadb-secret
+                  key: password
+                  optional: false
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          startupProbe:
+            httpGet:
+              port: 80
+              path: /
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: {{ include "apache.fullname" . }}-phpmyadmin-route
+  annotations:
+    kubernetes.io/ingress.class: private-ingress
+    argocd.argoproj.io/sync-wave: "40"
+spec:
+  entryPoints:
+    - websecure
+  routes:
+  {{- if .Values.project.username }}
+    - match: Host("{{ .Values.project.name }}-{{ .Values.project.username }}.db.codingduck.cloud")
+  {{- else}}
+    - match: Host("{{ .Values.project.name }}.db.codingduck.cloud")
+  {{- end}}
+      kind: Rule
+      services:
+        - name: {{ include "apache.fullname" . }}-phpmyadmin
+          port: 80
+          kind: Service
+  tls:
+    secretName: db-cert-secret
+{{- end }}
