@@ -85,9 +85,19 @@ spec:
                   name: {{ include "laravel.fullname" . }}-mariadb-secret
                   key: password
                   optional: false
+            - name: MARIADB_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "laravel.fullname" . }}-mariadb-secret
+                  key: password
+                  optional: false
             - name: MYSQL_ROOT_HOST
               value: '%'
+            - name: MARIADB_ROOT_HOST
+              value: '%'
             - name: MYSQL_DATABASE
+              value: {{ .Values.mariadb.databaseName }}
+            - name: MARIADB_DATABASE
               value: {{ .Values.mariadb.databaseName }}
             {{- with .Values.mariadb.env }}
             {{- toYaml . | nindent 12 }}

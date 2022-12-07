@@ -20,7 +20,7 @@ project:
 # MariaDB configuration
 mariadb:
   enabled: true # Enable MariaDB
-  version: 10.8.3 # MariaDB version
+  version: 10.9.4 # MariaDB version
   databaseName: laravel # Database name
   storageClass: ceph-block # The name of the storage class to use
   podAnnotations: {} # Annotations to add to the MariaDB pods
